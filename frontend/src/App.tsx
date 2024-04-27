@@ -1,5 +1,12 @@
+import Teste from "./components/Teste";
+import { Button } from "./components/ui/button";
+
 function App() {
-  return <div className="text-slate-400 text-lg">Olá mundo</div>;
+  return (
+    <div className="h-screen p-4 ">
+      <Teste />
+    </div>
+  );
 }
 
 export default App;
