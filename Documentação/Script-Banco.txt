@@ -1,0 +1,75 @@
+CREATE SCHEMA IF NOT EXISTS doit;
+USE doit;
+
+CREATE TABLE IF NOT EXISTS usuario (
+codigo INT NOT NULL AUTO_INCREMENT,
+nome VARCHAR(60) NOT NULL,
+email VARCHAR(150) NOT NULL,
+telefone VARCHAR(11) NULL,
+senha VARCHAR(300) NOT NULL,
+url_foto VARCHAR(350) NOT NULL,
+personal TINYINT NOT NULL DEFAULT 0,
+PRIMARY KEY (codigo)
+);
+
+CREATE TABLE IF NOT EXISTS treino(
+codigo INT NOT NULL AUTO_INCREMENT,
+nome VARCHAR(50) NOT NULL,
+observacoes VARCHAR(500) NULL,
+usuario_codigo INT NOT NULL,
+PRIMARY KEY (codigo),
+FOREIGN KEY (usuario_codigo) REFERENCES usuario (codigo)
+);
+
+CREATE TABLE IF NOT EXISTS exercicio(
+codigo INT NOT NULL AUTO_INCREMENT,
+nome VARCHAR(50) NULL,
+descricao VARCHAR(500) NULL,
+link_tutorial VARCHAR(200) NULL,
+PRIMARY KEY (codigo)
+);
+
+
+CREATE TABLE IF NOT EXISTS treino_exercicio(
+codigo INT NOT NULL AUTO_INCREMENT,
+repeticoes INT NOT NULL,
+intervalo INT NOT NULL,
+series INT NOT NULL,
+treino_codigo INT NOT NULL,
+exercicio_codigo INT NOT NULL,
+PRIMARY KEY (codigo),
+FOREIGN KEY (treino_codigo) REFERENCES treino (codigo),
+FOREIGN KEY (exercicio_codigo) REFERENCES exercicio (codigo)
+);
+
+CREATE TABLE IF NOT EXISTS token_reset_senha (
+id VARCHAR(36) NOT NULL,
+data TIMESTAMP(0) NOT NULL ,
+usuarior_codigo INT NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (usuarior_codigo) REFERENCES usuario (codigo)
+);
+
+CREATE TABLE IF NOT EXISTS avaliacao_fisica (
+codigo INT NOT NULL AUTO_INCREMENT,
+altura INT NULL,
+peso DECIMAL(10,2) NULL,
+percentual_gordura DECIMAL(2,2) NULL,
+imc DECIMAL(3,2) NULL,
+quantidade_gordura DECIMAL(3,2) NULL,
+percentual_agua DECIMAL(3,2) NULL,
+medida_cintura DECIMAL(3,2) NULL,
+medida_braco_direito DECIMAL(3,2) NULL,
+medida_braco_esquerdo DECIMAL(3,2) NULL,
+medida_perna_direita DECIMAL(3,2) NULL,
+medida_perna_esquerda DECIMAL(3,2) NULL,
+medida_panturrilha_direita DECIMAL(3,2) NULL,
+medida_panturrilha_esquerda DECIMAL(3,2) NULL,
+medida_peitoral DECIMAL(3,2) NULL,
+medida_abdomen DECIMAL(3,2) NULL,
+nome VARCHAR(50) NULL,
+observacoes VARCHAR(500) NULL,
+usuario_codigo INT NOT NULL,
+PRIMARY KEY (codigo),
+FOREIGN KEY (usuario_codigo) REFERENCES usuario (codigo)
+);
