@@ -31,7 +31,7 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<String> createUser(@Valid @RequestBody User user ){
         userService.createUser(user);
-
+        System.out.println("teste");
         return ResponseEntity.status(200).body(user.toString());
     }
 
