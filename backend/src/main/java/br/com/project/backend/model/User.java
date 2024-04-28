@@ -20,7 +20,7 @@ public class User {
 
     @NotBlank(message = "The email field is required")
     @Email(message = "Email is not valid")
-    @Column(name="email", length = 60, nullable = false)
+    @Column(name="email", length = 60, nullable = false, unique = true)
     private String email;
 
     @NotBlank(message = "The phone field is required")
@@ -35,8 +35,9 @@ public class User {
     @Column(name="url_photo", columnDefinition = "TEXT")
     private String url_photo;
 
-    @NotBlank(message = "The role field is required")
+    @NotNull(message = "The role field is required")
     @Column(name="role",nullable = false, length = 20)
-    private String role;
+    private UserRoles role;
 
 }
+

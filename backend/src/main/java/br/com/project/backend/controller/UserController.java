@@ -1,10 +1,12 @@
 package br.com.project.backend.controller;
 
 import br.com.project.backend.model.User;
+import br.com.project.backend.security.Token;
 import br.com.project.backend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -29,12 +31,21 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<String> createUser(@Valid @RequestBody User user ){
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user ){
         userService.createUser(user);
-        return ResponseEntity.status(200).body(user.toString());
+
+        return ResponseEntity.status(201).body(user);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException e){
+        if(e.getMessage().contains("Enum")){
+            return ResponseEntity.status(400).body("error: Invalid role");
+        }else{
+            return ResponseEntity.status(400).body("error: Invalid format JSON");
+        }
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationException(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap<>();
@@ -48,5 +59,6 @@ public class UserController {
 
         return errors;
     }
+
 
 }
