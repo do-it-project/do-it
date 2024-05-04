@@ -5,7 +5,7 @@ import br.com.project.backend.DTO.LoginRequestDTO;
 import br.com.project.backend.DTO.LoginResponseDTO;
 import br.com.project.backend.DTO.RequestResetPasswordDTO;
 import br.com.project.backend.model.TokenReset;
-import br.com.project.backend.utils.EmailUtil;
+import br.com.project.backend.utils.EmailUtils;
 import br.com.project.backend.model.User;
 import br.com.project.backend.security.Token;
 import br.com.project.backend.service.TokenResetService;
@@ -18,7 +18,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +28,12 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    private final EmailUtil emailUtil;
+    private final EmailUtils emailUtils;
     private final TokenResetService tokenResetService;
 
-    public UserController(UserService userService, EmailUtil emailUtil, TokenResetService tokenResetService){
+    public UserController(UserService userService, EmailUtils emailUtils, TokenResetService tokenResetService){
         this.userService = userService;
-        this.emailUtil = emailUtil;
+        this.emailUtils = emailUtils;
         this.tokenResetService = tokenResetService;
     }
 
@@ -55,9 +54,9 @@ public class UserController {
         Optional<User> tempUser = userService.findUserById(user.getId());
 
         if (tempUser.isPresent()) {
-            String password = tempUser.get().getPassword();
+            String currentPasswordHashed = tempUser.get().getPassword();
 
-            User updatedUser = userService.editUser(user, password);
+            User updatedUser = userService.editUser(user, currentPasswordHashed);
 
             return ResponseEntity.status(200).body(updatedUser);
         } else {
@@ -106,7 +105,7 @@ public class UserController {
 
         if(tempUser.isPresent()){
             TokenReset tokenReset = tokenResetService.createToken(tempUser.get());
-            emailUtil.sendEmail(
+            emailUtils.sendEmail(
                     tempUser.get().getEmail(),
                     "Reset Password Token",
                     "Hello " + tempUser.get().getName() + "\nReset link: http://localhost:5173/reset?email=" +tempUser.get().getEmail()
@@ -117,7 +116,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        return ResponseEntity.ok("Token gerado");
+        return ResponseEntity.ok("Token sent successfully.");
     }
 
     @PostMapping("/confirm-reset-password")
@@ -137,13 +136,11 @@ public class UserController {
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
-            if(!tempUser.get().equals(tempTokenReset.get().getUser()))
+            if(!tempUser.get().equals(tempTokenReset.get().getUser())){
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
 
-            tempTokenReset.get().getUser().setPassword(confirmResetPassword.getPassword());
-
-            userService.editUser(tempTokenReset.get().getUser(), tempTokenReset.get().getUser().getPassword());
-
+            userService.changePassword(tempUser.get(), confirmResetPassword.getPassword());
         } else{
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

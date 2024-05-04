@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 
 @Service
-public class EmailUtil {
+public class EmailUtils {
 
     @Autowired
     private JavaMailSender mailSender;

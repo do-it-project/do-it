@@ -37,9 +37,9 @@ public class UserService {
         return this.repository.save(user);
     }
 
-    public User editUser(User user, String password) {
+    public User editUser(User user, String passwordHashed) {
 
-        if (!(password.equals(user.getPassword()))) {
+        if (!(passwordHashed.equals(user.getPassword()))) {
             String encodePassword = this.passwordEncoder.encode(user.getPassword());
             user.setPassword(encodePassword);
         }
@@ -49,6 +49,13 @@ public class UserService {
 
     public void deleteUser(int id) {
         this.repository.deleteById(id);
+    }
+
+    public User changePassword(User user, String newPassword){
+        String passwordHash = this.passwordEncoder.encode(newPassword);
+        user.setPassword(passwordHash);
+
+        return this.repository.save(user);
     }
 
     public Optional<User> findUserById(int id){
