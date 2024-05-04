@@ -31,9 +31,6 @@ public class UserService {
 
 
     public User createUser(User user){
-
-        return this.repository.save(user);
-
         String encoder = this.passwordEncoder.encode(user.getPassword());
 
         user.setPassword(encoder);
@@ -67,8 +64,6 @@ public class UserService {
 
         return valid;
 
-    public void createUser(User user){
-        this.repository.save(user);
     }
 
     public Token createToken(User user){

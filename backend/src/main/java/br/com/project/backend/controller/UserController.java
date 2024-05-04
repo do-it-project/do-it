@@ -1,3 +1,24 @@
+package br.com.project.backend.controller;
+
+import br.com.project.backend.DTO.LoginRequestDTO;
+import br.com.project.backend.DTO.LoginResponseDTO;
+import br.com.project.backend.model.User;
+import br.com.project.backend.security.Token;
+import br.com.project.backend.service.UserService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+@RestController
 @CrossOrigin("*")
 public class UserController {
 
