@@ -18,6 +18,10 @@ public class SecurityConfig {
         http.csrf((csrf) -> csrf.disable()).authorizeHttpRequests((requests) -> requests
                 .requestMatchers(HttpMethod.GET, "/token").permitAll()
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/users/{id}").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/users").permitAll()
+                .requestMatchers(HttpMethod.POST, "/login").permitAll()
                 .anyRequest().authenticated());
 
         http.addFilterBefore(new SecurityFilter(), UsernamePasswordAuthenticationFilter.class);
