@@ -2,6 +2,7 @@ package br.com.project.backend.controller;
 
 import br.com.project.backend.DTO.LoginRequestDTO;
 import br.com.project.backend.DTO.LoginResponseDTO;
+import br.com.project.backend.emailUtils.TesteService;
 import br.com.project.backend.model.User;
 import br.com.project.backend.security.Token;
 import br.com.project.backend.service.UserService;
@@ -23,9 +24,11 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final TesteService testeService;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService, EmailService emailService, TesteService testeService){
         this.userService = userService;
+        this.testeService = testeService;
     }
 
     @GetMapping("/users")
@@ -86,6 +89,22 @@ public class UserController {
         Token token = userService.createToken(tempUser.get());
 
         return ResponseEntity.ok(generateLoginResponse(tempUser.get(), token));
+    }
+
+    @GetMapping("/teste")
+    public void teste(){
+        testeService.sendEmail("vinimarins01@gmail.com","Testando","Teste");
+    }
+
+
+    @PostMapping("/send-reset")
+    public void sendResetPassword(@RequestBody String email){
+
+        Optional<User> tempUser = userService.findUserByEmail(email);
+
+        if(tempUser.isPresent()){
+
+        }
     }
 
     public LoginResponseDTO generateLoginResponse(User user, Token token){

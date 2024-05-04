@@ -1,6 +1,17 @@
+import { useEffect } from "react";
 import { Button } from "./components/ui/button";
 
 function App() {
+  useEffect(() => {
+    // Obtendo os parâmetros de consulta da URL
+    const searchParams = new URLSearchParams(window.location.search);
+    const email = searchParams.get("email");
+
+    if (email) {
+      // Faça o que quiser com o email aqui
+      console.log(email);
+    }
+  }, []);
   return (
     <div className="h-screen w-full bg-black-1 flex justify-center items-center ">
       <div className="gap-4 flex flex-wrap">
