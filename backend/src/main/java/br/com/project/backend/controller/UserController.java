@@ -4,6 +4,7 @@ import br.com.project.backend.DTO.ConfirmResetPasswordDTO;
 import br.com.project.backend.DTO.LoginRequestDTO;
 import br.com.project.backend.DTO.LoginResponseDTO;
 import br.com.project.backend.DTO.RequestResetPasswordDTO;
+import br.com.project.backend.model.TokenReset;
 import br.com.project.backend.utils.EmailUtil;
 import br.com.project.backend.model.User;
 import br.com.project.backend.security.Token;
@@ -103,7 +104,13 @@ public class UserController {
         Optional<User> tempUser = userService.findUserByEmail(requestResetPassword.getEmail());
 
         if(tempUser.isPresent()){
-            tokenResetService.createToken(tempUser.get());
+            TokenReset tokenReset = tokenResetService.createToken(tempUser.get());
+            emailUtil.sendEmail(
+                    tempUser.get().getEmail(),
+                    "Reset Password Token",
+                    "Hello " + tempUser.get().getName() + "\nReset link: http://localhost:5173/reset?email=" +tempUser.get().getEmail()
+            );
+
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
