@@ -57,5 +57,4 @@ public class TokenResetService {
         return this.repository.findByToken(token);
     }
 
-    // public expire
 }

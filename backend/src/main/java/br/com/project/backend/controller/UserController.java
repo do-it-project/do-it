@@ -108,7 +108,8 @@ public class UserController {
             emailUtils.sendEmail(
                     tempUser.get().getEmail(),
                     "Reset Password Token",
-                    "Hello " + tempUser.get().getName() + "\nReset link: http://localhost:5173/reset?email=" +tempUser.get().getEmail()
+                    "Hello " + tempUser.get().getName()
+                    + "\nReset link: http://localhost:5173/reset?email=" +tempUser.get().getEmail()
                     + "\nToken: " + tokenReset.getToken()
             );
 
@@ -141,6 +142,7 @@ public class UserController {
             }
 
             userService.changePassword(tempUser.get(), confirmResetPassword.getPassword());
+            tempTokenReset.get().setUsed(true);
         } else{
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
