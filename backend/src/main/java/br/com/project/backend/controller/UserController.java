@@ -18,6 +18,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,6 +110,7 @@ public class UserController {
                     tempUser.get().getEmail(),
                     "Reset Password Token",
                     "Hello " + tempUser.get().getName() + "\nReset link: http://localhost:5173/reset?email=" +tempUser.get().getEmail()
+                    + "\nToken: " + tokenReset.getToken()
             );
 
         }else{
@@ -119,11 +121,35 @@ public class UserController {
     }
 
     @PostMapping("/confirm-reset-password")
-    public ResponseEntity<?> confirmReset(@Valid @RequestBody ConfirmResetPasswordDTO confirmResetPasswordDTO){
+    public ResponseEntity<?> confirmReset(@Valid @RequestBody ConfirmResetPasswordDTO confirmResetPassword){
 
+        Optional<TokenReset> tempTokenReset = tokenResetService.findByToken(confirmResetPassword.getToken());
 
+        if(tempTokenReset.isPresent()){
 
-        return ResponseEntity.ok("");
+            if(!tokenResetService.isTokenResetValid(tempTokenReset.get())){
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            Optional<User> tempUser = userService.findUserByEmail(confirmResetPassword.getEmail());
+
+            if(!tempUser.isPresent()){
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+
+            if(!tempUser.get().equals(tempTokenReset.get().getUser()))
+                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+            tempTokenReset.get().getUser().setPassword(confirmResetPassword.getPassword());
+
+            userService.editUser(tempTokenReset.get().getUser(), tempTokenReset.get().getUser().getPassword());
+
+        } else{
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return ResponseEntity.ok("Password modified successfully");
+
     }
 
     public LoginResponseDTO generateLoginResponse(User user, Token token){
