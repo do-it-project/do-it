@@ -142,7 +142,7 @@ public class UserController {
             }
 
             userService.changePassword(tempUser.get(), confirmResetPassword.getPassword());
-            tempTokenReset.get().setUsed(true);
+            tokenResetService.attTokenUsed(tempTokenReset.get());
         } else{
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

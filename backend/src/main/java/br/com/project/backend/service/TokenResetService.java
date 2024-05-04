@@ -39,6 +39,11 @@ public class TokenResetService {
         return this.repository.save(tokenReset);
     }
 
+    public TokenReset attTokenUsed(TokenReset tokenReset){
+        tokenReset.setUsed(true);
+        return this.repository.save(tokenReset);
+    }
+
     public boolean isTokenResetValid(TokenReset tokenReset){
         if(tokenReset.getUsed()) {
             return false;
