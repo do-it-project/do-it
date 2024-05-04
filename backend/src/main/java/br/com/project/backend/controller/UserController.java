@@ -103,12 +103,12 @@ public class UserController {
         Optional<User> tempUser = userService.findUserByEmail(requestResetPassword.getEmail());
 
         if(tempUser.isPresent()){
-            // cria o token e relaciona com o email no banco
-            tokenResetService.createToken();
-            // seta o timer
+            tokenResetService.createToken(tempUser.get());
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("Token gerado");
     }
 
     @PostMapping("/confirm-reset-password")

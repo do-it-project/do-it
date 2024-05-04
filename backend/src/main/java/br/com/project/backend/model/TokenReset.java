@@ -2,9 +2,6 @@ package br.com.project.backend.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -27,11 +24,15 @@ public class TokenReset {
     @Column(name="expiration_date", columnDefinition = "TIMESTAMP", nullable = false)
     private LocalDateTime expirationDate;
 
-    @Column(name = "status", nullable = false)
-    private boolean status;
+    @Column(name = "used", nullable = false)
+    private boolean used;
 
-    public boolean getStatus(){
-        return this.status;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    public boolean getUsed(){
+        return this.used;
     }
 
 }
