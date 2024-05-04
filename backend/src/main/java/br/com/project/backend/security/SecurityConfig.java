@@ -22,7 +22,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/users/{id}").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/users").permitAll()
                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                .requestMatchers(HttpMethod.GET, "/teste").permitAll()
+                .requestMatchers(HttpMethod.POST, "/teste-token").permitAll()
                 .anyRequest().authenticated());
 
         http.addFilterBefore(new SecurityFilter(), UsernamePasswordAuthenticationFilter.class);

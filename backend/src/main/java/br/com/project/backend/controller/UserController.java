@@ -2,9 +2,11 @@ package br.com.project.backend.controller;
 
 import br.com.project.backend.DTO.LoginRequestDTO;
 import br.com.project.backend.DTO.LoginResponseDTO;
-import br.com.project.backend.emailUtils.TesteService;
+import br.com.project.backend.utils.EmailUtil;
+import br.com.project.backend.model.TokenReset;
 import br.com.project.backend.model.User;
 import br.com.project.backend.security.Token;
+import br.com.project.backend.service.TokenResetService;
 import br.com.project.backend.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,11 +30,13 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    private final TesteService testeService;
+    private final EmailUtil emailUtil;
+    private final TokenResetService tokenResetService;
 
-    public UserController(UserService userService, EmailService emailService, TesteService testeService){
+    public UserController(UserService userService, EmailUtil emailUtil, TokenResetService tokenResetService){
         this.userService = userService;
-        this.testeService = testeService;
+        this.emailUtil = emailUtil;
+        this.tokenResetService = tokenResetService;
     }
 
     @GetMapping("/users")
@@ -91,20 +99,33 @@ public class UserController {
         return ResponseEntity.ok(generateLoginResponse(tempUser.get(), token));
     }
 
-    @GetMapping("/teste")
-    public void teste(){
-        testeService.sendEmail("vinimarins01@gmail.com","Testando","Teste");
-    }
-
-
     @PostMapping("/send-reset")
     public void sendResetPassword(@RequestBody String email){
 
         Optional<User> tempUser = userService.findUserByEmail(email);
 
         if(tempUser.isPresent()){
-
+            // cria o token e relaciona com o email no banco
+            // seta o timer
         }
+    }
+
+    @PostMapping("/teste-token")
+    public ResponseEntity<TokenReset> testeToken(@RequestBody TokenReset tokenReset){
+        tokenResetService.createToken(tokenReset);
+        LocalDateTime dataHora = LocalDateTime.now();
+
+        DateTimeFormatter datePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String dataHoraFormatada = dataHora.format(datePattern);
+
+        LocalDateTime dataHoraAgain = LocalDateTime.parse(dataHoraFormatada, datePattern);
+        tokenReset.setCreationDate(dataHora);
+
+        tokenReset.setStatus(true);
+
+        return ResponseEntity.ok(tokenReset);
+
     }
 
     public LoginResponseDTO generateLoginResponse(User user, Token token){
