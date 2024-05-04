@@ -23,6 +23,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/users").permitAll()
                 .requestMatchers(HttpMethod.POST, "/login").permitAll()
                 .requestMatchers(HttpMethod.POST, "/teste-token").permitAll()
+                .requestMatchers(HttpMethod.POST, "/request-reset-password").permitAll()
+                .requestMatchers(HttpMethod.POST, "/confirm-reset-password").permitAll()
                 .anyRequest().authenticated());
 
         http.addFilterBefore(new SecurityFilter(), UsernamePasswordAuthenticationFilter.class);

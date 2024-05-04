@@ -1,9 +1,10 @@
 package br.com.project.backend.controller;
 
+import br.com.project.backend.DTO.ConfirmResetPasswordDTO;
 import br.com.project.backend.DTO.LoginRequestDTO;
 import br.com.project.backend.DTO.LoginResponseDTO;
+import br.com.project.backend.DTO.RequestResetPasswordDTO;
 import br.com.project.backend.utils.EmailUtil;
-import br.com.project.backend.model.TokenReset;
 import br.com.project.backend.model.User;
 import br.com.project.backend.security.Token;
 import br.com.project.backend.service.TokenResetService;
@@ -16,10 +17,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,33 +96,27 @@ public class UserController {
         return ResponseEntity.ok(generateLoginResponse(tempUser.get(), token));
     }
 
-    @PostMapping("/send-reset")
-    public void sendResetPassword(@RequestBody String email){
 
-        Optional<User> tempUser = userService.findUserByEmail(email);
+    @PostMapping("/request-reset-password")
+    public ResponseEntity<?> requestReset(@Valid @RequestBody RequestResetPasswordDTO requestResetPassword){
+
+        Optional<User> tempUser = userService.findUserByEmail(requestResetPassword.getEmail());
 
         if(tempUser.isPresent()){
             // cria o token e relaciona com o email no banco
+            tokenResetService.createToken();
             // seta o timer
         }
+
+        return ResponseEntity.ok("");
     }
 
-    @PostMapping("/teste-token")
-    public ResponseEntity<TokenReset> testeToken(@RequestBody TokenReset tokenReset){
-        tokenResetService.createToken(tokenReset);
-        LocalDateTime dataHora = LocalDateTime.now();
+    @PostMapping("/confirm-reset-password")
+    public ResponseEntity<?> confirmReset(@Valid @RequestBody ConfirmResetPasswordDTO confirmResetPasswordDTO){
 
-        DateTimeFormatter datePattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        String dataHoraFormatada = dataHora.format(datePattern);
 
-        LocalDateTime dataHoraAgain = LocalDateTime.parse(dataHoraFormatada, datePattern);
-        tokenReset.setCreationDate(dataHora);
-
-        tokenReset.setStatus(true);
-
-        return ResponseEntity.ok(tokenReset);
-
+        return ResponseEntity.ok("");
     }
 
     public LoginResponseDTO generateLoginResponse(User user, Token token){
