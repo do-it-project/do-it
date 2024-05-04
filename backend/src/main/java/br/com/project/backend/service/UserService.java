@@ -1,14 +1,14 @@
 package br.com.project.backend.service;
 
 import br.com.project.backend.model.User;
+import br.com.project.backend.model.UserRoles;
 import br.com.project.backend.repository.IUser;
-<<<<<<< Updated upstream
-=======
 import br.com.project.backend.security.Token;
 import br.com.project.backend.security.TokenUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
->>>>>>> Stashed changes
+import br.com.project.backend.security.Token;
+import br.com.project.backend.security.TokenUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,10 +29,11 @@ public class UserService {
         return this.repository.findAll();
     }
 
+
     public User createUser(User user){
-<<<<<<< Updated upstream
+
         return this.repository.save(user);
-=======
+
         String encoder = this.passwordEncoder.encode(user.getPassword());
 
         user.setPassword(encoder);
@@ -65,11 +66,13 @@ public class UserService {
         Boolean valid = passwordEncoder.matches(password, user.getPassword());
 
         return valid;
+
+    public void createUser(User user){
+        this.repository.save(user);
     }
 
     public Token createToken(User user){
         return new Token(TokenUtil.createToken(user));
->>>>>>> Stashed changes
     }
 
 }
