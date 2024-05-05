@@ -1,7 +1,5 @@
 package br.com.project.backend.utils;
 
-import java.util.Random;
-
 public class TokenResetUtils {
 
     private final int tokenSize = 6;
