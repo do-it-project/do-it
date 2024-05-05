@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class ConfirmResetPasswordDTO {
 
+    @NotBlank(message = "The token field is required")
     private String token;
 
     private String email;

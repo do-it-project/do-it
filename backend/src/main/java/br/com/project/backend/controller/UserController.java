@@ -33,7 +33,8 @@ public class UserController {
     private final HashUtils hashUtils;
     private final TokenResetService tokenResetService;
 
-    public UserController(UserService userService, EmailUtils emailUtils, TokenResetService tokenResetService, HashUtils hashUtils){
+    public UserController(UserService userService, EmailUtils emailUtils,
+                          TokenResetService tokenResetService, HashUtils hashUtils){
         this.userService = userService;
         this.emailUtils = emailUtils;
         this.tokenResetService = tokenResetService;
@@ -84,7 +85,6 @@ public class UserController {
     public ResponseEntity<LoginResponseDTO> authUser(@Valid @RequestBody LoginRequestDTO user) {
 
         Optional<User> tempUser = userService.findUserByEmail(user.getEmail());
-        System.out.println("entrei");
         if (tempUser.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -92,9 +92,7 @@ public class UserController {
 
         Boolean valid = hashUtils.authStringHash(user.getPassword(), tempUser.get().getPassword());
 
-        if (!valid) {
-            System.out.println("errou senha");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        if (!valid) {return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         Token token = userService.createToken(tempUser.get());
