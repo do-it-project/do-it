@@ -10,6 +10,7 @@ import br.com.project.backend.model.User;
 import br.com.project.backend.security.Token;
 import br.com.project.backend.service.TokenResetService;
 import br.com.project.backend.service.UserService;
+import br.com.project.backend.utils.TokenResetUtils;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -105,11 +106,13 @@ public class UserController {
 
         if(tempUser.isPresent()){
             TokenReset tokenReset = tokenResetService.createToken(tempUser.get());
+            String encodedEmail = emailUtils.encodeEmail(tempUser.get().getEmail());
+
             emailUtils.sendEmail(
                     tempUser.get().getEmail(),
                     "Reset Password Token",
                     "Hello " + tempUser.get().getName()
-                    + "\nReset link: http://localhost:5173/reset?email=" +tempUser.get().getEmail()
+                    + "\nReset link: http://localhost:5173/reset?email=" + encodedEmail
                     + "\nToken: " + tokenReset.getToken()
             );
 
