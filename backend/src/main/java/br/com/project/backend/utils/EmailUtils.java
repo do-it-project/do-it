@@ -1,5 +1,8 @@
 package br.com.project.backend.utils;
 
+import br.com.project.backend.model.TokenReset;
+import br.com.project.backend.model.User;
+import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,6 +18,12 @@ public class EmailUtils {
     @Autowired
     private JavaMailSender mailSender;
 
+    private final HashUtils hashUtils;
+
+    public EmailUtils(HashUtils hashUtils){
+        this.hashUtils = hashUtils;
+    }
+
     public void sendEmail(String to, String subject, String body) {
         JavaMailSenderImpl mailSenderImpl = (JavaMailSenderImpl) mailSender;
         mailSenderImpl.getSession().getProperties().put("mail.smtp.starttls.enable", "true");
@@ -27,14 +36,16 @@ public class EmailUtils {
         mailSender.send(message);
     }
 
-    public String encodeEmail(String email){
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hashedBytes = md.digest(email.getBytes());
-            return Base64.getEncoder().encodeToString(hashedBytes);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public void sendEmailTokenRequest(User user, TokenReset tokenReset){
+
+        String encodedEmail = hashUtils.hashString(user.getEmail());
+
+        this.sendEmail(
+                user.getEmail(),
+                "Reset Password Token",
+                "Hello " + user.getName()
+                        + "\nReset link: http://localhost:5173/reset?email=" + encodedEmail
+                        + "\nToken: " + tokenReset.getToken()
+        );
     }
 }

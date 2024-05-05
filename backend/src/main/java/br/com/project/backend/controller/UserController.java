@@ -10,7 +10,7 @@ import br.com.project.backend.model.User;
 import br.com.project.backend.security.Token;
 import br.com.project.backend.service.TokenResetService;
 import br.com.project.backend.service.UserService;
-import br.com.project.backend.utils.TokenResetUtils;
+import br.com.project.backend.utils.HashUtils;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +30,14 @@ public class UserController {
 
     private final UserService userService;
     private final EmailUtils emailUtils;
+    private final HashUtils hashUtils;
     private final TokenResetService tokenResetService;
 
-    public UserController(UserService userService, EmailUtils emailUtils, TokenResetService tokenResetService){
+    public UserController(UserService userService, EmailUtils emailUtils, TokenResetService tokenResetService, HashUtils hashUtils){
         this.userService = userService;
         this.emailUtils = emailUtils;
         this.tokenResetService = tokenResetService;
+        this.hashUtils = hashUtils;
     }
 
     @GetMapping("/users")
@@ -82,14 +84,16 @@ public class UserController {
     public ResponseEntity<LoginResponseDTO> authUser(@Valid @RequestBody LoginRequestDTO user) {
 
         Optional<User> tempUser = userService.findUserByEmail(user.getEmail());
-
+        System.out.println("entrei");
         if (tempUser.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        Boolean valid = userService.authPassword(tempUser.get(), user.getPassword());
+
+        Boolean valid = hashUtils.authStringHash(user.getPassword(), tempUser.get().getPassword());
 
         if (!valid) {
+            System.out.println("errou senha");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -106,16 +110,7 @@ public class UserController {
 
         if(tempUser.isPresent()){
             TokenReset tokenReset = tokenResetService.createToken(tempUser.get());
-            String encodedEmail = emailUtils.encodeEmail(tempUser.get().getEmail());
-
-            emailUtils.sendEmail(
-                    tempUser.get().getEmail(),
-                    "Reset Password Token",
-                    "Hello " + tempUser.get().getName()
-                    + "\nReset link: http://localhost:5173/reset?email=" + encodedEmail
-                    + "\nToken: " + tokenReset.getToken()
-            );
-
+            emailUtils.sendEmailTokenRequest(tempUser.get(), tokenReset);
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -134,17 +129,12 @@ public class UserController {
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
-            Optional<User> tempUser = userService.findUserByEmail(confirmResetPassword.getEmail());
-
-            if(!tempUser.isPresent()){
+            Boolean valid = hashUtils.authStringHash(tempTokenReset.get().getUser().getEmail(), confirmResetPassword.getEmail());
+            if(!valid) {
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
-            if(!tempUser.get().equals(tempTokenReset.get().getUser())){
-                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-
-            userService.changePassword(tempUser.get(), confirmResetPassword.getPassword());
+            userService.changePassword(tempTokenReset.get().getUser(), confirmResetPassword.getPassword());
             tokenResetService.attTokenUsed(tempTokenReset.get());
         } else{
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

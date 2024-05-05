@@ -5,6 +5,7 @@ import br.com.project.backend.model.UserRoles;
 import br.com.project.backend.repository.IUser;
 import br.com.project.backend.security.Token;
 import br.com.project.backend.security.TokenUtil;
+import br.com.project.backend.utils.HashUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import br.com.project.backend.security.Token;
@@ -18,20 +19,19 @@ import java.util.Optional;
 public class UserService {
 
     private final IUser repository;
-    private final PasswordEncoder passwordEncoder;
+    private final HashUtils hashUtils;
 
-    public UserService(IUser repository){
+    public UserService(IUser repository, HashUtils hashUtils){
         this.repository = repository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.hashUtils = hashUtils;
     }
 
     public List<User> usersList(){
         return this.repository.findAll();
     }
 
-
     public User createUser(User user){
-        String encoder = this.passwordEncoder.encode(user.getPassword());
+        String encoder = hashUtils.hashString(user.getPassword());
 
         user.setPassword(encoder);
         return this.repository.save(user);
@@ -40,7 +40,7 @@ public class UserService {
     public User editUser(User user, String passwordHashed) {
 
         if (!(passwordHashed.equals(user.getPassword()))) {
-            String encodePassword = this.passwordEncoder.encode(user.getPassword());
+            String encodePassword = hashUtils.hashString(user.getPassword());
             user.setPassword(encodePassword);
         }
 
@@ -52,7 +52,7 @@ public class UserService {
     }
 
     public User changePassword(User user, String newPassword){
-        String passwordHash = this.passwordEncoder.encode(newPassword);
+        String passwordHash = hashUtils.hashString(newPassword);
         user.setPassword(passwordHash);
 
         return this.repository.save(user);
@@ -64,13 +64,6 @@ public class UserService {
 
     public Optional<User> findUserByEmail(String email){
         return this.repository.findByEmail(email);
-    }
-
-    public Boolean authPassword(User user, String password) {
-        Boolean valid = passwordEncoder.matches(password, user.getPassword());
-
-        return valid;
-
     }
 
     public Token createToken(User user){

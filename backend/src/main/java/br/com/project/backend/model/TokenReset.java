@@ -31,6 +31,25 @@ public class TokenReset {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    public TokenReset(){
+        int tokenSize = 6;
+
+        String AlphaNumericString = "0123456789";
+
+        StringBuilder sb = new StringBuilder(tokenSize);
+
+        for (int i = 0; i < tokenSize; i++) {
+            int index
+                    = (int) (AlphaNumericString.length()
+                    * Math.random());
+
+            sb.append(AlphaNumericString
+                    .charAt(index));
+        }
+        
+        this.token = sb.toString();
+    }
+
     public boolean getUsed(){
         return this.used;
     }

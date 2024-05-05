@@ -3,9 +3,7 @@ package br.com.project.backend.service;
 import br.com.project.backend.model.TokenReset;
 import br.com.project.backend.model.User;
 import br.com.project.backend.repository.ITokenReset;
-import br.com.project.backend.security.Token;
 import br.com.project.backend.utils.DateUtils;
-import br.com.project.backend.utils.TokenResetUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,7 +28,6 @@ public class TokenResetService {
 
         TokenReset tokenReset = new TokenReset();
 
-        tokenReset.setToken(new TokenResetUtils().generateToken());
         tokenReset.setCreationDate(new DateUtils().formatDate(creationDate));
         tokenReset.setExpirationDate(new DateUtils().formatDate(creationDate.plusMinutes(10)));
         tokenReset.setUsed(false);
