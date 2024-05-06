@@ -89,10 +89,10 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
 
-
         Boolean valid = hashUtils.authStringHash(user.getPassword(), tempUser.get().getPassword());
 
-        if (!valid) {return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        if (!valid) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         Token token = userService.createToken(tempUser.get());
