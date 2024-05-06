@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name="tokenReset")
+@Table(name="token_reset")
 public class TokenReset {
 
     @Id

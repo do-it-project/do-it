@@ -16,17 +16,16 @@ public class SecurityConfig {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
         http.csrf((csrf) -> csrf.disable()).authorizeHttpRequests((requests) -> requests
-                .requestMatchers(HttpMethod.GET, "/token").permitAll()
-                .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                .requestMatchers(HttpMethod.GET, "/users").permitAll()
-                .requestMatchers(HttpMethod.DELETE, "/users/{id}").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/users").permitAll()
-                .requestMatchers(HttpMethod.POST, "/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/teste-token").permitAll()
-                .requestMatchers(HttpMethod.POST, "/request-reset-password").permitAll()
-                .requestMatchers(HttpMethod.POST, "/confirm-reset-password").permitAll()
-                .anyRequest().authenticated());
-
+//                .requestMatchers(HttpMethod.GET, "/token").permitAll()
+//                .requestMatchers(HttpMethod.POST, "/users").permitAll()
+//                .requestMatchers(HttpMethod.GET, "/users").permitAll()
+//                .requestMatchers(HttpMethod.DELETE, "/users/{id}").permitAll()
+//                .requestMatchers(HttpMethod.PUT, "/users").permitAll()
+//                .requestMatchers(HttpMethod.POST, "/login").permitAll()
+//                .requestMatchers(HttpMethod.POST, "/teste-token").permitAll()
+//                .requestMatchers(HttpMethod.POST, "/request-reset-password").permitAll()
+//                .requestMatchers(HttpMethod.POST, "/confirm-reset-password").permitAll()
+                .anyRequest().permitAll());
         http.addFilterBefore(new SecurityFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
