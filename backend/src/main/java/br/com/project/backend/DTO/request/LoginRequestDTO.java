@@ -1,15 +1,17 @@
-package br.com.project.backend.DTO;
+package br.com.project.backend.DTO.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class ConfirmResetPasswordDTO {
+@NoArgsConstructor
+public class LoginRequestDTO {
 
-    @NotBlank(message = "The token field is required")
-    private String token;
-
+    @NotBlank(message = "The email field is required")
+    @Email(message = "Email is not valid")
     private String email;
 
     @NotBlank(message = "The password field is required")

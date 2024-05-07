@@ -1,10 +1,12 @@
 package br.com.project.backend.controller;
 
-import br.com.project.backend.DTO.ConfirmResetPasswordDTO;
-import br.com.project.backend.DTO.LoginRequestDTO;
-import br.com.project.backend.DTO.LoginResponseDTO;
-import br.com.project.backend.DTO.RequestResetPasswordDTO;
+import br.com.project.backend.DTO.entities.UserDTO;
+import br.com.project.backend.DTO.request.ConfirmResetPasswordRequestDTO;
+import br.com.project.backend.DTO.request.LoginRequestDTO;
+import br.com.project.backend.DTO.response.LoginResponseDTO;
+import br.com.project.backend.DTO.request.ResetPasswordRequestDTO;
 import br.com.project.backend.model.TokenReset;
+import br.com.project.backend.utils.DTOUtils;
 import br.com.project.backend.utils.EmailUtils;
 import br.com.project.backend.model.User;
 import br.com.project.backend.security.Token;
@@ -12,34 +14,28 @@ import br.com.project.backend.service.TokenResetService;
 import br.com.project.backend.service.UserService;
 import br.com.project.backend.utils.HashUtils;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
 public class UserController {
 
-    private final UserService userService;
-    private final EmailUtils emailUtils;
-    private final HashUtils hashUtils;
-    private final TokenResetService tokenResetService;
+    @Autowired
+    private UserService userService;
 
-    public UserController(UserService userService, EmailUtils emailUtils,
-                          TokenResetService tokenResetService, HashUtils hashUtils){
-        this.userService = userService;
-        this.emailUtils = emailUtils;
-        this.tokenResetService = tokenResetService;
-        this.hashUtils = hashUtils;
-    }
+    @Autowired
+    private EmailUtils emailUtils;
+
+    @Autowired
+    private HashUtils hashUtils;
+
+    @Autowired
+    private TokenResetService tokenResetService;
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers(){
@@ -47,13 +43,14 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user ){
-        userService.createUser(user);
-        return ResponseEntity.status(201).body(user);
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody User user ){
+        User createdUser = userService.createUser(user);
+
+        return ResponseEntity.status(201).body(new DTOUtils().generateUser(createdUser));
     }
 
     @PutMapping("/users")
-    public ResponseEntity<User> editUser(@Valid @RequestBody User user) {
+    public ResponseEntity<UserDTO> editUser(@Valid @RequestBody User user) {
 
         Optional<User> tempUser = userService.findUserById(user.getId());
 
@@ -62,14 +59,14 @@ public class UserController {
 
             User updatedUser = userService.editUser(user, currentPasswordHashed);
 
-            return ResponseEntity.status(200).body(updatedUser);
+            return ResponseEntity.status(200).body(new DTOUtils().generateUser(updatedUser));
         } else {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable int id) {
+    public ResponseEntity<?> deleteUser(@PathVariable("id") int id) {
 
         Optional<User> tempUser = userService.findUserById(id);
 
@@ -97,12 +94,11 @@ public class UserController {
 
         Token token = userService.createToken(tempUser.get());
 
-        return ResponseEntity.ok(generateLoginResponse(tempUser.get(), token));
+        return ResponseEntity.ok(new DTOUtils().generateLoginResponse(tempUser.get(), token));
     }
 
-
     @PostMapping("/request-reset-password")
-    public ResponseEntity<?> requestReset(@Valid @RequestBody RequestResetPasswordDTO requestResetPassword){
+    public ResponseEntity<?> requestReset(@Valid @RequestBody ResetPasswordRequestDTO requestResetPassword){
 
         Optional<User> tempUser = userService.findUserByEmail(requestResetPassword.getEmail());
 
@@ -117,7 +113,7 @@ public class UserController {
     }
 
     @PostMapping("/confirm-reset-password")
-    public ResponseEntity<?> confirmReset(@Valid @RequestBody ConfirmResetPasswordDTO confirmResetPassword){
+    public ResponseEntity<?> confirmReset(@Valid @RequestBody ConfirmResetPasswordRequestDTO confirmResetPassword){
 
         Optional<TokenReset> tempTokenReset = tokenResetService.findByToken(confirmResetPassword.getToken());
 
@@ -140,44 +136,5 @@ public class UserController {
 
         return ResponseEntity.ok("Password modified successfully");
 
-    }
-
-    public LoginResponseDTO generateLoginResponse(User user, Token token){
-        LoginResponseDTO response = new LoginResponseDTO();
-
-        response.setPassword(user.getPassword());
-        response.setName(user.getName());
-        response.setPhone(user.getPhone());
-        response.setId(user.getId());
-        response.setRole(user.getRole());
-        response.setEmail(user.getEmail());
-        response.setUrl_photo(user.getUrl_photo());
-
-        response.setToken(token.getToken());
-
-        return response;
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException e){
-        if(e.getMessage().contains("Enum")){
-            return ResponseEntity.status(400).body("error: Invalid role");
-        }else{
-            return ResponseEntity.status(400).body("error: Invalid format JSON");
-        }
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationException(MethodArgumentNotValidException e) {
-        Map<String, String> errors = new HashMap<>();
-
-        e.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-
-            errors.put(fieldName, errorMessage);
-        });
-
-        return errors;
     }
 }

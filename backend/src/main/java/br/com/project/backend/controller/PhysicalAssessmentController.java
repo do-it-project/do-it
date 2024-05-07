@@ -2,21 +2,21 @@ package br.com.project.backend.controller;
 
 import br.com.project.backend.model.PhysicalAssessment;
 import br.com.project.backend.service.PhysicalAssessmentService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
 public class PhysicalAssessmentController {
 
-    private final PhysicalAssessmentService paService;
-
-    public PhysicalAssessmentController(PhysicalAssessmentService pa) {
-        this.paService = pa;
-    }
+    @Autowired
+    private PhysicalAssessmentService paService;
 
     @GetMapping("/physical-assessments")
     public ResponseEntity<List<PhysicalAssessment>> createPhysicalAssesment(){
@@ -24,13 +24,20 @@ public class PhysicalAssessmentController {
     }
 
     @PostMapping("/physical-assessments")
-    public ResponseEntity<PhysicalAssessment> createPhysicalAssesment(@RequestBody PhysicalAssessment pa){
+    public ResponseEntity<PhysicalAssessment> createPhysicalAssesment(@RequestBody @Valid PhysicalAssessment pa){
         return ResponseEntity.status(HttpStatus.CREATED).body(this.paService.createPhysicalAssessment(pa));
     }
 
     @DeleteMapping("/physical-assessments/{id}")
-    public ResponseEntity<String> createPhysicalAssesment(@PathVariable int id){
-        this.paService.deletePhysicalAssessment(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    public ResponseEntity<String> createPhysicalAssesment(@PathVariable("id") int id){
+
+        Optional<PhysicalAssessment> tempPA = paService.findPhysicalAssessmentById(id);
+
+        if (tempPA.isPresent()) {
+            paService.deletePhysicalAssessment(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

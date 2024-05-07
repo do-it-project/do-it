@@ -1,6 +1,8 @@
 package br.com.project.backend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -13,53 +15,69 @@ public class PhysicalAssessment {
     @Column(name = "id")
     private int id;
 
+    @NotBlank(message = "The name field is required")
     @Column(name = "name", nullable = false, length = 50, unique = true)
     private String name;
 
+    @NotBlank(message = "The comments field is required")
     @Column(name = "comments", length = 500)
     private String comments;
 
+    @NotNull(message = "The height field is required")
     @Column(name = "height", nullable = false)
-    private int height;
+    private Double height;
 
+    @NotNull(message = "The weight field is required")
     @Column(name = "weight", nullable = false)
-    private double weight;
+    private Double weight;
 
+    @NotNull(message = "The fat_percentage field is required")
     @Column(name = "fat_percentage", nullable = false)
-    private double fat_percentage;
+    private Double fat_percentage;
 
+    @NotNull(message = "The water_percentage field is required")
     @Column(name = "water_percentage", nullable = false)
-    private double water_percentage;
+    private Double water_percentage;
 
+    @NotNull(message = "The imc field is required")
     @Column(name = "imc", nullable = false)
-    private double imc;
+    private Double imc;
 
+    @NotNull(message = "The waist_measurement field is required")
     @Column(name = "waist_measurement", nullable = false)
-    private double waist_measurement;
+    private Double waist_measurement;
 
+    @NotNull(message = "The right_arm_measurement field is required")
     @Column(name = "right_arm_measurement", nullable = false)
-    private double right_arm_measurement;
+    private Double right_arm_measurement;
 
+    @NotNull(message = "The left_arm_measurement field is required")
     @Column(name = "left_arm_measurement", nullable = false)
-    private double left_arm_measurement;
+    private Double left_arm_measurement;
 
+    @NotNull(message = "The left_leg_measurement field is required")
     @Column(name = "left_leg_measurement", nullable = false)
-    private double left_leg_measurement;
+    private Double left_leg_measurement;
 
+    @NotNull(message = "The right_leg_measurement field is required")
     @Column(name = "right_leg_measurement", nullable = false)
-    private double right_leg_measurement;
+    private Double right_leg_measurement;
 
+    @NotNull(message = "The right_calf_measurement field is required")
     @Column(name = "right_calf_measurement", nullable = false)
-    private double right_calf_measurement;
+    private Double right_calf_measurement;
 
+    @NotNull(message = "The left_calf_measurement field is required")
     @Column(name = "left_calf_measurement", nullable = false)
-    private double left_calf_measurement;
+    private Double left_calf_measurement;
 
+    @NotNull(message = "The chest_measurement field is required")
     @Column(name = "chest_measurement", nullable = false)
-    private double chest_measurement;
+    private Double chest_measurement;
 
+    @NotNull(message = "The abdominal_measurement field is required")
     @Column(name = "abdominal_measurement", nullable = false)
-    private double abdominal_measurement;
+    private Double abdominal_measurement;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -70,6 +88,7 @@ public class PhysicalAssessment {
     }
 
     public void calc_imc(){
-        this.imc =  this.weight / (this.height * this.height);
+        if(this.height != null)
+            this.imc =  this.weight / (this.height * this.height);
     }
 }

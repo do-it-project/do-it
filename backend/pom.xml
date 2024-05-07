@@ -84,6 +84,7 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>0.11.2</version>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -102,5 +103,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

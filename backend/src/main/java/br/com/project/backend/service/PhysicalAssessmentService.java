@@ -2,6 +2,7 @@ package br.com.project.backend.service;
 
 import br.com.project.backend.model.PhysicalAssessment;
 import br.com.project.backend.repository.IPhysicalAssessment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -9,11 +10,8 @@ import java.util.Optional;
 @Service
 public class PhysicalAssessmentService {
 
-    private final IPhysicalAssessment repository;
-
-    public PhysicalAssessmentService(IPhysicalAssessment repository){
-        this.repository = repository;
-    }
+    @Autowired
+    private IPhysicalAssessment repository;
 
     public List<PhysicalAssessment> physicalAssessmentsList(){
         return this.repository.findAll();

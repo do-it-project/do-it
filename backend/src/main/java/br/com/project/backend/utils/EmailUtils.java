@@ -2,15 +2,11 @@ package br.com.project.backend.utils;
 
 import br.com.project.backend.model.TokenReset;
 import br.com.project.backend.model.User;
-import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 
 @Service
 public class EmailUtils {
@@ -18,7 +14,8 @@ public class EmailUtils {
     @Autowired
     private JavaMailSender mailSender;
 
-    private final HashUtils hashUtils;
+    @Autowired
+    private HashUtils hashUtils;
 
     public EmailUtils(HashUtils hashUtils){
         this.hashUtils = hashUtils;

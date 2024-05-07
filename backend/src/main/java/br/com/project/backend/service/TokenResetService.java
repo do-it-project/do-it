@@ -4,6 +4,7 @@ import br.com.project.backend.model.TokenReset;
 import br.com.project.backend.model.User;
 import br.com.project.backend.repository.ITokenReset;
 import br.com.project.backend.utils.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,11 +14,8 @@ import java.util.Optional;
 @Service
 public class TokenResetService {
 
-    private final ITokenReset repository;
-
-    public TokenResetService(ITokenReset repository){
-        this.repository = repository;
-    }
+    @Autowired
+    private ITokenReset repository;
 
     public List<TokenReset> tokenResetList(){
         return this.repository.findAll();
