@@ -7,6 +7,7 @@ import br.com.project.backend.security.Token;
 
 public class DTOUtils {
 
+    // Generate userDTO response to deprive sensitive data
     public UserDTO generateUser(User user){
         UserDTO response = new UserDTO();
 
@@ -21,6 +22,7 @@ public class DTOUtils {
         return response;
     }
 
+    // Generate loginResponseDTO response to deprive sensitive data
     public LoginResponseDTO generateLoginResponse(User user, Token token){
         LoginResponseDTO response = new LoginResponseDTO();
 
