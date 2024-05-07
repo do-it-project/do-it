@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class TokenUtil {
     private static final String HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
-    private static final long EXPIRATION = (60/2)*1000;
+    private static final long EXPIRATION = 60/2 * 60 * 1000;
     private static final String SECRET_KEY = "fT5gU1Gv6Qr9Lm2Hz2Jx2PÇ2Wb3Re2TK";
     private static final String EMISSOR = "doitBackend";
 
