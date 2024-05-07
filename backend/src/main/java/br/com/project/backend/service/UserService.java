@@ -1,5 +1,6 @@
 package br.com.project.backend.service;
 
+import br.com.project.backend.exception.UserAlreadyExistsException;
 import br.com.project.backend.model.User;
 import br.com.project.backend.repository.IUser;
 import br.com.project.backend.security.Token;
@@ -25,6 +26,13 @@ public class UserService {
     }
 
     public User createUser(User user){
+
+        Optional<User> tempUser = this.findUserByEmail(user.getEmail());
+
+        if(tempUser.isPresent()){
+            throw new UserAlreadyExistsException();
+        }
+
         String encoder = hashUtils.hashString(user.getPassword());
 
         user.setPassword(encoder);

@@ -1,6 +1,9 @@
 package br.com.project.backend.service;
 
+import br.com.project.backend.exception.PyshicalAssessmentAlreadyExistsException;
+import br.com.project.backend.exception.UserAlreadyExistsException;
 import br.com.project.backend.model.PhysicalAssessment;
+import br.com.project.backend.model.User;
 import br.com.project.backend.repository.IPhysicalAssessment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,12 @@ public class PhysicalAssessmentService {
     }
 
     public PhysicalAssessment createPhysicalAssessment(PhysicalAssessment pa){
+        Optional<PhysicalAssessment> tempPA = this.findPhysicalAssessmentByName(pa.getName());
+
+        if(tempPA.isPresent()){
+            throw new PyshicalAssessmentAlreadyExistsException();
+        }
+
         return this.repository.save(pa);
     }
 

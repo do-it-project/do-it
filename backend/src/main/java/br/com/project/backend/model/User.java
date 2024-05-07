@@ -35,7 +35,6 @@ public class User {
     @Column(name="url_photo", columnDefinition = "TEXT")
     private String url_photo;
 
-    @NotNull(message = "The role field is required")
     @Column(name="role",nullable = false, length = 20)
     private UserRoles role;
 
