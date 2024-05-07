@@ -2,9 +2,11 @@ package br.com.project.backend.controller;
 
 import br.com.project.backend.DTO.entities.UserDTO;
 import br.com.project.backend.DTO.request.ConfirmResetPasswordRequestDTO;
+import br.com.project.backend.DTO.request.EditUserRequestDTO;
 import br.com.project.backend.DTO.request.LoginRequestDTO;
 import br.com.project.backend.DTO.response.LoginResponseDTO;
 import br.com.project.backend.DTO.request.ResetPasswordRequestDTO;
+import br.com.project.backend.mapper.UserMapper;
 import br.com.project.backend.model.TokenReset;
 import br.com.project.backend.utils.DTOUtils;
 import br.com.project.backend.utils.EmailUtils;
@@ -38,28 +40,26 @@ public class UserController {
     private TokenResetService tokenResetService;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers(){
+    public ResponseEntity<List<UserDTO>> getUsers(){
         return ResponseEntity.status(200).body(userService.usersList());
     }
 
     @PostMapping("/users")
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody User user ){
-        User createdUser = userService.createUser(user);
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody User user){
+        UserDTO createdUser = userService.createUser(user);
 
-        return ResponseEntity.status(201).body(new DTOUtils().generateUser(createdUser));
+        return ResponseEntity.status(201).body(createdUser);
     }
 
     @PutMapping("/users")
-    public ResponseEntity<UserDTO> editUser(@Valid @RequestBody User user) {
+    public ResponseEntity<UserDTO> editUser(@Valid @RequestBody EditUserRequestDTO user) {
 
         Optional<User> tempUser = userService.findUserById(user.getId());
 
         if (tempUser.isPresent()) {
-            String currentPasswordHashed = tempUser.get().getPassword();
+            UserDTO updatedUser = userService.editUser(user.getPassword(), tempUser.get());
 
-            User updatedUser = userService.editUser(user, currentPasswordHashed);
-
-            return ResponseEntity.status(200).body(new DTOUtils().generateUser(updatedUser));
+            return ResponseEntity.status(200).body(updatedUser);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -82,6 +82,7 @@ public class UserController {
     public ResponseEntity<LoginResponseDTO> authUser(@Valid @RequestBody LoginRequestDTO user) {
 
         Optional<User> tempUser = userService.findUserByEmail(user.getEmail());
+
         if (tempUser.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

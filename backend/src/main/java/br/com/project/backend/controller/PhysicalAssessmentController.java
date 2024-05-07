@@ -1,5 +1,6 @@
 package br.com.project.backend.controller;
 
+import br.com.project.backend.DTO.entities.PhysicalAssessmentDTO;
 import br.com.project.backend.model.PhysicalAssessment;
 import br.com.project.backend.service.PhysicalAssessmentService;
 import jakarta.validation.Valid;
@@ -19,7 +20,7 @@ public class PhysicalAssessmentController {
     private PhysicalAssessmentService paService;
 
     @GetMapping("/physical-assessments")
-    public ResponseEntity<List<PhysicalAssessment>> createPhysicalAssesment(){
+    public ResponseEntity<List<PhysicalAssessmentDTO>> createPhysicalAssesment(){
         return ResponseEntity.ok(this.paService.physicalAssessmentsList());
     }
 

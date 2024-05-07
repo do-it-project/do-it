@@ -2,6 +2,7 @@ package br.com.project.backend.infra;
 
 import br.com.project.backend.exception.PyshicalAssessmentAlreadyExistsException;
 import br.com.project.backend.exception.UserAlreadyExistsException;
+import br.com.project.backend.exception.UserPasswordNotValidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,6 +24,11 @@ public class ExceptionsHandler {
     @ExceptionHandler(PyshicalAssessmentAlreadyExistsException.class)
     public ResponseEntity<String> handlePhysicalAssessmentAlreadyExists(PyshicalAssessmentAlreadyExistsException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
+    @ExceptionHandler(UserPasswordNotValidException.class)
+    public ResponseEntity<String> handleUserPasswordNotValidException(UserPasswordNotValidException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

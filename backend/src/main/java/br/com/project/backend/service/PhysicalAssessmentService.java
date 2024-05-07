@@ -1,7 +1,10 @@
 package br.com.project.backend.service;
 
+import br.com.project.backend.DTO.entities.PhysicalAssessmentDTO;
 import br.com.project.backend.exception.PyshicalAssessmentAlreadyExistsException;
 import br.com.project.backend.exception.UserAlreadyExistsException;
+import br.com.project.backend.mapper.PhysicalAssessmentMapper;
+import br.com.project.backend.mapper.UserMapper;
 import br.com.project.backend.model.PhysicalAssessment;
 import br.com.project.backend.model.User;
 import br.com.project.backend.repository.IPhysicalAssessment;
@@ -16,8 +19,13 @@ public class PhysicalAssessmentService {
     @Autowired
     private IPhysicalAssessment repository;
 
-    public List<PhysicalAssessment> physicalAssessmentsList(){
-        return this.repository.findAll();
+    @Autowired
+    private PhysicalAssessmentMapper paMapper;
+
+    public List<PhysicalAssessmentDTO> physicalAssessmentsList(){
+        List<PhysicalAssessment> paList = this.repository.findAll();
+
+        return paMapper.toDTOList(paList);
     }
 
     public PhysicalAssessment createPhysicalAssessment(PhysicalAssessment pa){

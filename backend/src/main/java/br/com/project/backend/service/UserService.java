@@ -1,6 +1,9 @@
 package br.com.project.backend.service;
 
+import br.com.project.backend.DTO.entities.UserDTO;
 import br.com.project.backend.exception.UserAlreadyExistsException;
+import br.com.project.backend.exception.UserPasswordNotValidException;
+import br.com.project.backend.mapper.UserMapper;
 import br.com.project.backend.model.User;
 import br.com.project.backend.repository.IUser;
 import br.com.project.backend.security.Token;
@@ -13,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService{
 
     @Autowired
     private IUser repository;
@@ -21,11 +24,16 @@ public class UserService {
     @Autowired
     private HashUtils hashUtils;
 
-    public List<User> usersList(){
-        return this.repository.findAll();
+    @Autowired
+    private UserMapper userMapper;
+
+    public List<UserDTO> usersList(){
+        List<User> users = this.repository.findAll();
+
+        return userMapper.toDTOList(users);
     }
 
-    public User createUser(User user){
+    public UserDTO createUser(User user){
 
         Optional<User> tempUser = this.findUserByEmail(user.getEmail());
 
@@ -36,17 +44,22 @@ public class UserService {
         String encoder = hashUtils.hashString(user.getPassword());
 
         user.setPassword(encoder);
-        return this.repository.save(user);
+
+        return userMapper.toDTO(this.repository.save(user));
     }
 
-    public User editUser(User user, String passwordHashed) {
+    public UserDTO editUser(String passwordText, User user) {
 
-        if (!(passwordHashed.equals(user.getPassword()))) {
-            String encodePassword = hashUtils.hashString(user.getPassword());
-            user.setPassword(encodePassword);
+        if (!passwordText.isEmpty()) {
+            if(passwordText.length() >= 5){
+                String encodePassword = hashUtils.hashString(passwordText);
+                user.setPassword(encodePassword);
+            } else {
+                throw new UserPasswordNotValidException();
+            }
         }
 
-        return this.repository.save(user);
+        return userMapper.toDTO(this.repository.save(user));
     }
 
     public void deleteUser(int id) {
