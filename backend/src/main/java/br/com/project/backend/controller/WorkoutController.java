@@ -1,5 +1,6 @@
 package br.com.project.backend.controller;
 
+import br.com.project.backend.DTO.entities.WorkoutDTO;
 import br.com.project.backend.model.Workout;
 import br.com.project.backend.service.WorkoutService;
 import jakarta.validation.Valid;
@@ -19,12 +20,12 @@ public class WorkoutController {
     private WorkoutService workoutService;
 
     @GetMapping
-    public ResponseEntity<List<Workout>> getWorkoutsList(){
+    public ResponseEntity<List<WorkoutDTO>> getWorkoutsList(){
         return ResponseEntity.ok(this.workoutService.workoutsList());
     }
 
     @PostMapping
-    public ResponseEntity<Workout> createWorkout(@Valid @RequestBody Workout workout){
+    public ResponseEntity<WorkoutDTO> createWorkout(@Valid @RequestBody Workout workout){
         return ResponseEntity.status(HttpStatus.CREATED).body(workoutService.createWorkout(workout));
     }
 

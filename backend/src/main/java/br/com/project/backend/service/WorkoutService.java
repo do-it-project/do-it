@@ -1,6 +1,8 @@
 package br.com.project.backend.service;
 
+import br.com.project.backend.DTO.entities.WorkoutDTO;
 import br.com.project.backend.exception.WorkoutAlreadyExistsException;
+import br.com.project.backend.mapper.WorkoutMapper;
 import br.com.project.backend.model.Workout;
 import br.com.project.backend.repository.IWorkout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +17,23 @@ public class WorkoutService {
     @Autowired
     private IWorkout repository;
 
-    public List<Workout> workoutsList(){
-        return this.repository.findAll();
+    @Autowired
+    private WorkoutMapper workoutMapper;
+
+    public List<WorkoutDTO> workoutsList(){
+        List<Workout> tempWorkouts = this.repository.findAll();
+
+        return workoutMapper.toDTOList(tempWorkouts);
     }
 
-    public Workout createWorkout(Workout workout){
+    public WorkoutDTO createWorkout(Workout workout){
         Optional<Workout> tempWorkout = this.findWorkoutByName(workout.getName());
 
         if(tempWorkout.isPresent()){
             throw new WorkoutAlreadyExistsException();
         }
-        return this.repository.save(workout);
+
+        return workoutMapper.toDTO(this.repository.save(workout));
     }
 
     public void deleteWorkout(int id){
