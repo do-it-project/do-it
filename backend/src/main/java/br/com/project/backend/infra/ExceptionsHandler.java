@@ -1,9 +1,6 @@
 package br.com.project.backend.infra;
 
-import br.com.project.backend.exception.ExerciseAlreadyExistsException;
-import br.com.project.backend.exception.PyshicalAssessmentAlreadyExistsException;
-import br.com.project.backend.exception.UserAlreadyExistsException;
-import br.com.project.backend.exception.UserPasswordNotValidException;
+import br.com.project.backend.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -34,6 +31,11 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(ExerciseAlreadyExistsException.class)
     public ResponseEntity<String> handleExerciseAlreadyExistsException(ExerciseAlreadyExistsException e){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
+    @ExceptionHandler(WorkoutAlreadyExistsException.class)
+    public ResponseEntity<String> handleWorkoutAlreadyExistsException(WorkoutAlreadyExistsException e){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
