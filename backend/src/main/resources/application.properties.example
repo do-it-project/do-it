@@ -1,4 +1,4 @@
-spring.datasource.password = 
+spring.datasource.password =
 spring.datasource.username =
 spring.datasource.url =
 spring.jpa.hibernate.ddl-auto=

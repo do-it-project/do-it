@@ -14,23 +14,24 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
+@RequestMapping("/physical-assessments")
 public class PhysicalAssessmentController {
 
     @Autowired
     private PhysicalAssessmentService paService;
 
-    @GetMapping("/physical-assessments")
-    public ResponseEntity<List<PhysicalAssessmentDTO>> createPhysicalAssesment(){
+    @GetMapping
+    public ResponseEntity<List<PhysicalAssessmentDTO>> getPhysicalAssesments(){
         return ResponseEntity.ok(this.paService.physicalAssessmentsList());
     }
 
-    @PostMapping("/physical-assessments")
+    @PostMapping
     public ResponseEntity<PhysicalAssessmentDTO> createPhysicalAssesment(@RequestBody @Valid PhysicalAssessment pa){
         return ResponseEntity.status(HttpStatus.CREATED).body(this.paService.createPhysicalAssessment(pa));
     }
 
-    @DeleteMapping("/physical-assessments/{id}")
-    public ResponseEntity<String> createPhysicalAssesment(@PathVariable("id") int id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePhysicalAssesment(@PathVariable("id") int id){
 
         Optional<PhysicalAssessment> tempPA = paService.findPhysicalAssessmentById(id);
 

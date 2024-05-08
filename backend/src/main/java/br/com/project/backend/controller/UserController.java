@@ -25,6 +25,7 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -39,19 +40,19 @@ public class UserController {
     @Autowired
     private TokenResetService tokenResetService;
 
-    @GetMapping("/users")
+    @GetMapping
     public ResponseEntity<List<UserDTO>> getUsers(){
         return ResponseEntity.status(200).body(userService.usersList());
     }
 
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody User user){
         UserDTO createdUser = userService.createUser(user);
 
         return ResponseEntity.status(201).body(createdUser);
     }
 
-    @PutMapping("/users")
+    @PutMapping
     public ResponseEntity<UserDTO> editUser(@Valid @RequestBody EditUserRequestDTO user) {
 
         Optional<User> tempUser = userService.findUserById(user.getId());
@@ -65,7 +66,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable("id") int id) {
 
         Optional<User> tempUser = userService.findUserById(id);
