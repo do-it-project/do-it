@@ -22,7 +22,6 @@ public class ExerciseService {
 
     @Transactional
     public Exercise createExercise(Exercise ex){
-
         Optional<Exercise> tempEx = this.repository.findByName(ex.getName());
 
         if(tempEx.isPresent()){
