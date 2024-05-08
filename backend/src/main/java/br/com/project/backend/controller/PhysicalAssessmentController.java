@@ -25,7 +25,7 @@ public class PhysicalAssessmentController {
     }
 
     @PostMapping("/physical-assessments")
-    public ResponseEntity<PhysicalAssessment> createPhysicalAssesment(@RequestBody @Valid PhysicalAssessment pa){
+    public ResponseEntity<PhysicalAssessmentDTO> createPhysicalAssesment(@RequestBody @Valid PhysicalAssessment pa){
         return ResponseEntity.status(HttpStatus.CREATED).body(this.paService.createPhysicalAssessment(pa));
     }
 

@@ -8,6 +8,7 @@ import br.com.project.backend.mapper.UserMapper;
 import br.com.project.backend.model.PhysicalAssessment;
 import br.com.project.backend.model.User;
 import br.com.project.backend.repository.IPhysicalAssessment;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -28,16 +29,18 @@ public class PhysicalAssessmentService {
         return paMapper.toDTOList(paList);
     }
 
-    public PhysicalAssessment createPhysicalAssessment(PhysicalAssessment pa){
+    @Transactional
+    public PhysicalAssessmentDTO createPhysicalAssessment(PhysicalAssessment pa){
         Optional<PhysicalAssessment> tempPA = this.findPhysicalAssessmentByName(pa.getName());
 
         if(tempPA.isPresent()){
             throw new PyshicalAssessmentAlreadyExistsException();
         }
 
-        return this.repository.save(pa);
+        return paMapper.toDTO(this.repository.save(pa));
     }
 
+    @Transactional
     public void deletePhysicalAssessment(int id) {
         this.repository.deleteById(id);
     }
