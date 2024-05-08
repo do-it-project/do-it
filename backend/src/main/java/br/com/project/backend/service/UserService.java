@@ -9,6 +9,7 @@ import br.com.project.backend.repository.IUser;
 import br.com.project.backend.security.Token;
 import br.com.project.backend.security.TokenUtil;
 import br.com.project.backend.utils.HashUtils;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ public class UserService{
         return userMapper.toDTOList(users);
     }
 
+    @Transactional
     public UserDTO createUser(User user){
 
         Optional<User> tempUser = this.findUserByEmail(user.getEmail());
@@ -48,6 +50,7 @@ public class UserService{
         return userMapper.toDTO(this.repository.save(user));
     }
 
+    @Transactional
     public UserDTO editUser(String passwordText, User user) {
 
         if (!passwordText.isEmpty()) {
@@ -62,10 +65,12 @@ public class UserService{
         return userMapper.toDTO(this.repository.save(user));
     }
 
+    @Transactional
     public void deleteUser(int id) {
         this.repository.deleteById(id);
     }
 
+    @Transactional
     public User changePassword(User user, String newPassword){
         String passwordHash = hashUtils.hashString(newPassword);
         user.setPassword(passwordHash);

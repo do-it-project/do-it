@@ -4,6 +4,7 @@ import br.com.project.backend.model.TokenReset;
 import br.com.project.backend.model.User;
 import br.com.project.backend.repository.ITokenReset;
 import br.com.project.backend.utils.DateUtils;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public class TokenResetService {
         return this.repository.findAll();
     }
 
+    @Transactional
     public TokenReset createToken(User user){
         LocalDateTime creationDate = LocalDateTime.now();
 
@@ -33,6 +35,7 @@ public class TokenResetService {
         return this.repository.save(tokenReset);
     }
 
+    @Transactional
     public TokenReset attTokenUsed(TokenReset tokenReset){
         tokenReset.setUsed(true);
         return this.repository.save(tokenReset);

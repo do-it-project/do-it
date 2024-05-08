@@ -39,8 +39,7 @@ public class User {
     @Column(name="url_photo", columnDefinition = "TEXT")
     private String url_photo;
 
-    @Column(name="role",nullable = false, length = 20)
+    @Column(name="role", nullable = false)
     private UserRoles role;
-
 }
 
