@@ -6,9 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name="workout")
 public class Workout {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

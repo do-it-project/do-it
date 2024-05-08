@@ -1,5 +1,6 @@
 package br.com.project.backend.infra;
 
+import br.com.project.backend.exception.ExerciseAlreadyExistsException;
 import br.com.project.backend.exception.PyshicalAssessmentAlreadyExistsException;
 import br.com.project.backend.exception.UserAlreadyExistsException;
 import br.com.project.backend.exception.UserPasswordNotValidException;
@@ -31,6 +32,11 @@ public class ExceptionsHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 
+    @ExceptionHandler(ExerciseAlreadyExistsException.class)
+    public ResponseEntity<String> handleExerciseAlreadyExistsException(ExerciseAlreadyExistsException e){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException e) {
         Map<String, String> errors = new HashMap<>();
@@ -56,4 +62,6 @@ public class ExceptionsHandler {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
+
+
 }
