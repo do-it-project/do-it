@@ -1,12 +1,14 @@
 package br.com.project.backend.DTO.entities;
 
-import br.com.project.backend.model.User;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import br.com.project.backend.model.WorkoutExercise;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,4 +19,5 @@ public class WorkoutDTO {
     private String name;
     private String comments;
     private UserDTO user;
+    private List<WorkoutExercise> workout_exercises;
 }

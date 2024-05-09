@@ -3,6 +3,7 @@ package br.com.project.backend.controller;
 import br.com.project.backend.model.Exercise;
 import br.com.project.backend.model.User;
 import br.com.project.backend.service.ExerciseService;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,8 @@ public class ExerciseController {
 
     @GetMapping
     public ResponseEntity<List<Exercise>> getExercises(){
+
+
         return ResponseEntity.ok(this.exerciseService.exerciseList());
     }
 
@@ -36,7 +39,7 @@ public class ExerciseController {
         Optional<Exercise> tempEx = exerciseService.findExerciseById(id);
 
         if (tempEx.isPresent()) {
-            exerciseService.deleteExercise(id);
+            exerciseService.deleteExercise(tempEx.get());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
             return ResponseEntity.notFound().build();

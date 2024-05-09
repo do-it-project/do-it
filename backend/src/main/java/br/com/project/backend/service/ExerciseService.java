@@ -16,6 +16,7 @@ public class ExerciseService {
     @Autowired
     private IExercise repository;
 
+    @Transactional
     public List<Exercise> exerciseList(){
         return this.repository.findAll();
     }
@@ -32,8 +33,8 @@ public class ExerciseService {
     }
 
     @Transactional
-    public void deleteExercise(int id){
-        this.repository.deleteById(id);
+    public void deleteExercise(Exercise exercise){
+        this.repository.delete(exercise);
     }
 
     public Optional<Exercise> findExerciseByName(String name){
@@ -41,7 +42,7 @@ public class ExerciseService {
     }
 
     public Optional<Exercise> findExerciseById(int id){
-        return this.findExerciseById(id);
+        return this.repository.findById(id);
     }
 
 

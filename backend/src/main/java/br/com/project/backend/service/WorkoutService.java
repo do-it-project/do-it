@@ -4,7 +4,10 @@ import br.com.project.backend.DTO.entities.WorkoutDTO;
 import br.com.project.backend.exception.WorkoutAlreadyExistsException;
 import br.com.project.backend.mapper.WorkoutMapper;
 import br.com.project.backend.model.Workout;
+import br.com.project.backend.model.WorkoutExercise;
 import br.com.project.backend.repository.IWorkout;
+import br.com.project.backend.repository.IWorkoutExercise;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +23,14 @@ public class WorkoutService {
     @Autowired
     private WorkoutMapper workoutMapper;
 
+    @Transactional
     public List<WorkoutDTO> workoutsList(){
         List<Workout> tempWorkouts = this.repository.findAll();
 
         return workoutMapper.toDTOList(tempWorkouts);
     }
 
+    @Transactional
     public WorkoutDTO createWorkout(Workout workout){
         Optional<Workout> tempWorkout = this.findWorkoutByName(workout.getName());
 
@@ -36,8 +41,14 @@ public class WorkoutService {
         return workoutMapper.toDTO(this.repository.save(workout));
     }
 
-    public void deleteWorkout(int id){
-        this.repository.deleteById(id);
+    @Transactional
+    public WorkoutDTO editWorkout(Workout workout){
+        return workoutMapper.toDTO(this.repository.save(workout));
+    }
+
+    @Transactional
+    public void deleteWorkout(Workout workout){
+        this.repository.delete(workout);
     }
 
     public Optional<Workout> findWorkoutByName(String name){

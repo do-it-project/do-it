@@ -1,16 +1,23 @@
 package br.com.project.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.EnumNaming;
+import com.fasterxml.jackson.databind.deser.std.EnumDeserializer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mapstruct.EnumMapping;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name="user")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", length = 1, discriminatorType = DiscriminatorType.CHAR)
+@DiscriminatorValue("U")
 public class User {
 
     @Id
@@ -39,7 +46,7 @@ public class User {
     @Column(name="url_photo", columnDefinition = "TEXT")
     private String url_photo;
 
-    @Column(name="role", nullable = false)
-    private UserRoles role;
+    @Column(insertable = false, updatable = false)
+    private char type;
 }
 

@@ -12,6 +12,7 @@ function App() {
       console.log(email);
     }
   }, []);
+
   return (
     <div className="h-screen w-full bg-black-1 flex justify-center items-center ">
       <div className="gap-4 flex flex-wrap">

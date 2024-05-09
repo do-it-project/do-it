@@ -1,10 +1,16 @@
 package br.com.project.backend.model;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 
 @Data
@@ -25,8 +31,13 @@ public class Workout {
     @NotBlank(message = "The comments field is required")
     @Column(name = "comments", columnDefinition = "TEXT", nullable = false)
     private String comments;
-    
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
+//    @JsonBackReference
+    private List<WorkoutExercise> workout_exercises;
 }

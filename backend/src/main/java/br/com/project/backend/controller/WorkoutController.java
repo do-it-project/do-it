@@ -2,7 +2,10 @@ package br.com.project.backend.controller;
 
 import br.com.project.backend.DTO.entities.WorkoutDTO;
 import br.com.project.backend.model.Workout;
+import br.com.project.backend.model.WorkoutExercise;
+import br.com.project.backend.service.WorkoutExerciseService;
 import br.com.project.backend.service.WorkoutService;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,11 @@ public class WorkoutController {
         return ResponseEntity.ok(this.workoutService.workoutsList());
     }
 
+    @PutMapping
+    public ResponseEntity<WorkoutDTO> editWorkout(@Valid @RequestBody Workout workout){
+        return ResponseEntity.status(HttpStatus.OK).body(workoutService.editWorkout(workout));
+    }
+
     @PostMapping
     public ResponseEntity<WorkoutDTO> createWorkout(@Valid @RequestBody Workout workout){
         return ResponseEntity.status(HttpStatus.CREATED).body(workoutService.createWorkout(workout));
@@ -35,10 +43,11 @@ public class WorkoutController {
         Optional<Workout> tempWorkout = workoutService.findWorkoutById(id);
 
         if (tempWorkout.isPresent()) {
-            workoutService.deleteWorkout(id);
+            workoutService.deleteWorkout(tempWorkout.get());
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
 }
