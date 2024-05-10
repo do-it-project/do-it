@@ -15,5 +15,5 @@ public class UserDTO {
     private String email;
     private String phone;
     private String url_photo;
-    private char type;
+    private String type;
 }

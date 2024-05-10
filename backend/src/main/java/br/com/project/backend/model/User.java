@@ -46,7 +46,10 @@
         @Column(name="url_photo", columnDefinition = "TEXT")
         private String url_photo;
 
+        @Pattern(regexp = "[SP]", message = "Type must be 'S' for student or 'P' for personal")
+        @Size(min = 1, max = 1, message = "Type must have exactly one character")
+        @NotBlank(message = "The type field is required")
         @Column(insertable=false, updatable=false)
-        private char type;
+        private String type;
     }
 

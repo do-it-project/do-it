@@ -23,7 +23,7 @@ public class StudentDTO {
     private String email;
     private String phone;
     private String url_photo;
-    private char type;
+    private String type;
     private List<PhysicalAssessment> physicalAssessments;
     private List<Workout> workouts;
 }

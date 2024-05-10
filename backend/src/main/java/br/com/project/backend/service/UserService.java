@@ -6,6 +6,7 @@ import br.com.project.backend.DTO.response.LoginPersonalResponseDTO;
 import br.com.project.backend.DTO.response.LoginStudentResponseDTO;
 import br.com.project.backend.exception.UserAlreadyExistsException;
 import br.com.project.backend.exception.UserPasswordNotValidException;
+import br.com.project.backend.exception.UserTypeNotExistsException;
 import br.com.project.backend.mapper.UserMapper;
 import br.com.project.backend.model.Personal;
 import br.com.project.backend.model.Student;
@@ -54,16 +55,16 @@ public class UserService{
         String encoder = hashUtils.hashString(user.getPassword());
         user.setPassword(encoder);
 
-        if(user.getType() == 'P'){
+        if(user.getType().equals("P")){
             Personal userPersonal = userMapper.UserToPersonal(user);
             return userMapper.UserToUserDTO(this.repository.save(userPersonal));
 
-        }else if (user.getType() == 'S'){
-            Student userStudent = userMapper.UserToStudent(user);;
+        }else if (user.getType().equals("S")){
+            Student userStudent = userMapper.UserToStudent(user);
             return userMapper.UserToUserDTO(this.repository.save(userStudent));
 
         } else {
-            throw new RuntimeException("Type not exist");
+            throw new UserTypeNotExistsException();
         }
     }
 

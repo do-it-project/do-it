@@ -100,11 +100,11 @@ public class UserController {
 
         Token token = userService.createToken(tempUser.get());
 
-        if(tempUser.get().getType() == 'S'){
+        if(tempUser.get().getType().equals("S")){
             LoginStudentResponseDTO loginResponse = this.userService.doStudentLogin(tempUser.get().getEmail(), token);
             return ResponseEntity.ok(loginResponse);
 
-        } else if (tempUser.get().getType() == 'P') {
+        } else if (tempUser.get().getType().equals("P")) {
             LoginPersonalResponseDTO loginResponse = this.userService.doPersonalLogin(tempUser.get().getEmail(), token);
             return ResponseEntity.ok(loginResponse);
 
