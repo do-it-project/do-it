@@ -34,10 +34,10 @@ public class Workout {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JsonBackReference
+    private Student student;
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
-//    @JsonBackReference
     private List<WorkoutExercise> workout_exercises;
 }

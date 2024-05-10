@@ -1,23 +1,27 @@
 package br.com.project.backend.utils;
 
-import br.com.project.backend.DTO.entities.UserDTO;
-import br.com.project.backend.DTO.response.LoginResponseDTO;
-import br.com.project.backend.model.User;
+import br.com.project.backend.DTO.entities.PersonalDTO;
+import br.com.project.backend.DTO.entities.StudentDTO;
+import br.com.project.backend.DTO.response.LoginPersonalResponseDTO;
+import br.com.project.backend.DTO.response.LoginStudentResponseDTO;
 import br.com.project.backend.security.Token;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DTOUtils {
 
-    // Generate loginResponseDTO response to deprive sensitive data
-    public LoginResponseDTO generateLoginResponse(User user, Token token){
-        LoginResponseDTO response = new LoginResponseDTO();
+    public LoginStudentResponseDTO loginStudent(StudentDTO student, Token token) {
+        LoginStudentResponseDTO response = new LoginStudentResponseDTO();
+        response.setUser(student);
+        response.setToken(token);
 
-        response.setName(user.getName());
-        response.setPhone(user.getPhone());
-        response.setId(user.getId());
-        response.setRole(user.getRole());
-        response.setEmail(user.getEmail());
-        response.setUrl_photo(user.getUrl_photo());
-        response.setToken(token.getToken());
+        return response;
+    }
+
+    public LoginPersonalResponseDTO loginPersonal(PersonalDTO personal, Token token) {
+        LoginPersonalResponseDTO response = new LoginPersonalResponseDTO();
+        response.setUser(personal);
+        response.setToken(token);
 
         return response;
     }

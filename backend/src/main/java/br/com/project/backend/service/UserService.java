@@ -1,16 +1,23 @@
 package br.com.project.backend.service;
 
+import br.com.project.backend.DTO.entities.StudentDTO;
 import br.com.project.backend.DTO.entities.UserDTO;
+import br.com.project.backend.DTO.response.LoginPersonalResponseDTO;
+import br.com.project.backend.DTO.response.LoginStudentResponseDTO;
 import br.com.project.backend.exception.UserAlreadyExistsException;
 import br.com.project.backend.exception.UserPasswordNotValidException;
 import br.com.project.backend.mapper.UserMapper;
+import br.com.project.backend.model.Personal;
+import br.com.project.backend.model.Student;
 import br.com.project.backend.model.User;
 import br.com.project.backend.repository.IUser;
 import br.com.project.backend.security.Token;
 import br.com.project.backend.security.TokenUtil;
+import br.com.project.backend.utils.DTOUtils;
 import br.com.project.backend.utils.HashUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +35,7 @@ public class UserService{
     @Autowired
     private UserMapper userMapper;
 
+    @Transactional
     public List<UserDTO> usersList(){
         List<User> users = this.repository.findAll();
 
@@ -44,10 +52,19 @@ public class UserService{
         }
 
         String encoder = hashUtils.hashString(user.getPassword());
-
         user.setPassword(encoder);
 
-        return userMapper.toDTO(this.repository.save(user));
+        if(user.getType() == 'P'){
+            Personal userPersonal = userMapper.UserToPersonal(user);
+            return userMapper.UserToUserDTO(this.repository.save(userPersonal));
+
+        }else if (user.getType() == 'S'){
+            Student userStudent = userMapper.UserToStudent(user);;
+            return userMapper.UserToUserDTO(this.repository.save(userStudent));
+
+        } else {
+            throw new RuntimeException("Type not exist");
+        }
     }
 
     @Transactional
@@ -62,7 +79,7 @@ public class UserService{
             }
         }
 
-        return userMapper.toDTO(this.repository.save(user));
+        return userMapper.UserToUserDTO(this.repository.save(user));
     }
 
     @Transactional
@@ -78,12 +95,32 @@ public class UserService{
         return this.repository.save(user);
     }
 
+    public LoginStudentResponseDTO doStudentLogin(String userEmail, Token token){
+        Student tempStudent = this.findStudentByEmail(userEmail);
+
+        return new DTOUtils().loginStudent(userMapper.StudentToStudentDTO(tempStudent), token);
+    }
+
+    public LoginPersonalResponseDTO doPersonalLogin(String userEmail, Token token){
+        Personal tempPersonal = this.findPersonalByEmail(userEmail);
+
+        return new DTOUtils().loginPersonal(userMapper.PersonalToPersonalDTO(tempPersonal), token);
+    }
+
     public Optional<User> findUserById(int id){
         return this.repository.findById(id);
     }
 
     public Optional<User> findUserByEmail(String email){
-        return this.repository.findByEmail(email);
+        return this.repository.findUserByEmail(email);
+    }
+
+    public Student findStudentByEmail(String email){
+        return this.repository.findStudentByEmail(email);
+    }
+
+    public Personal findPersonalByEmail(String email){
+        return this.repository.findPersonalByEmail(email);
     }
 
     public Token createToken(User user){

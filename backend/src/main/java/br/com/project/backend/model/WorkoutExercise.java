@@ -11,7 +11,6 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,12 +37,10 @@ public class WorkoutExercise {
     @ManyToOne
     @JoinColumn(name = "workout_id", nullable = false, insertable = false, updatable = false)
     @JsonBackReference
-//    @JsonManagedReference
     private Workout workout;
 
     @ManyToOne
     @JoinColumn(name = "exercise_id", nullable = false, insertable = false, updatable = false)
-//    @JsonBackReference
-//    @JsonManagedReference
+    @JsonManagedReference
     private Exercise exercise;
 }

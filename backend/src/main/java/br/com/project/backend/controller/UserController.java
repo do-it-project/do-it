@@ -2,11 +2,12 @@ package br.com.project.backend.controller;
 
 import br.com.project.backend.DTO.entities.UserDTO;
 import br.com.project.backend.DTO.request.ConfirmResetPasswordRequestDTO;
-import br.com.project.backend.DTO.request.EditUserRequestDTO;
 import br.com.project.backend.DTO.request.LoginRequestDTO;
-import br.com.project.backend.DTO.response.LoginResponseDTO;
 import br.com.project.backend.DTO.request.ResetPasswordRequestDTO;
+import br.com.project.backend.DTO.response.LoginPersonalResponseDTO;
+import br.com.project.backend.DTO.response.LoginStudentResponseDTO;
 import br.com.project.backend.mapper.UserMapper;
+import br.com.project.backend.model.Student;
 import br.com.project.backend.model.TokenReset;
 import br.com.project.backend.utils.DTOUtils;
 import br.com.project.backend.utils.EmailUtils;
@@ -40,6 +41,9 @@ public class UserController {
     @Autowired
     private TokenResetService tokenResetService;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @GetMapping
     public ResponseEntity<List<UserDTO>> getUsers(){
         return ResponseEntity.status(200).body(userService.usersList());
@@ -53,7 +57,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserDTO> editUser(@Valid @RequestBody EditUserRequestDTO user) {
+    public ResponseEntity<UserDTO> editUser(@Valid @RequestBody User user) {
 
         Optional<User> tempUser = userService.findUserById(user.getId());
 
@@ -80,7 +84,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> authUser(@Valid @RequestBody LoginRequestDTO user) {
+    public ResponseEntity<?> authUser(@Valid @RequestBody LoginRequestDTO user) {
 
         Optional<User> tempUser = userService.findUserByEmail(user.getEmail());
 
@@ -96,7 +100,17 @@ public class UserController {
 
         Token token = userService.createToken(tempUser.get());
 
-        return ResponseEntity.ok(new DTOUtils().generateLoginResponse(tempUser.get(), token));
+        if(tempUser.get().getType() == 'S'){
+            LoginStudentResponseDTO loginResponse = this.userService.doStudentLogin(tempUser.get().getEmail(), token);
+            return ResponseEntity.ok(loginResponse);
+
+        } else if (tempUser.get().getType() == 'P') {
+            LoginPersonalResponseDTO loginResponse = this.userService.doPersonalLogin(tempUser.get().getEmail(), token);
+            return ResponseEntity.ok(loginResponse);
+
+        }else{
+            return ResponseEntity.ok(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/request-reset-password")

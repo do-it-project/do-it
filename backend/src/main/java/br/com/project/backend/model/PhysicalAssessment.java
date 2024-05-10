@@ -1,5 +1,6 @@
 package br.com.project.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -81,7 +82,8 @@ public class PhysicalAssessment {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JsonBackReference
+    private Student student;
 
     public PhysicalAssessment(){
         calc_imc();

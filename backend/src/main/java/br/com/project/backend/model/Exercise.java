@@ -37,6 +37,5 @@ public class Exercise {
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonBackReference
-//    @JsonManagedReference
     private List<WorkoutExercise> workout_exercises;
 }

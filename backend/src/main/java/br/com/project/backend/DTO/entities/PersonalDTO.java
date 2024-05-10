@@ -1,15 +1,19 @@
 package br.com.project.backend.DTO.entities;
 
+import br.com.project.backend.model.PhysicalAssessment;
+import br.com.project.backend.model.Workout;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class UserDTO {
+public class PersonalDTO {
     private Integer id;
     private String name;
     private String email;
