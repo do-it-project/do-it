@@ -1,6 +1,5 @@
 package br.com.project.backend.repository;
 
-
 import br.com.project.backend.model.Workout;
 import org.springframework.data.jpa.repository.JpaRepository;
 

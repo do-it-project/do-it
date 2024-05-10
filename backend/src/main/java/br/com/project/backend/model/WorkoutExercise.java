@@ -2,14 +2,10 @@ package br.com.project.backend.model;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-
-import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
@@ -35,12 +31,20 @@ public class WorkoutExercise {
     private Integer sets;
 
     @ManyToOne
-    @JoinColumn(name = "workout_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "workout_id", nullable = false)
     @JsonBackReference
     private Workout workout;
 
     @ManyToOne
-    @JoinColumn(name = "exercise_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "exercise_id", nullable = false)
     @JsonManagedReference
     private Exercise exercise;
+
+    public WorkoutExercise(Integer repetitions, Integer rest_pause, Integer sets, Workout workout, Exercise exercise) {
+        this.repetitions = repetitions;
+        this.rest_pause = rest_pause;
+        this.sets = sets;
+        this.workout = workout;
+        this.exercise = exercise;
+    }
 }
