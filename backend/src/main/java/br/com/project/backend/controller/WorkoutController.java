@@ -2,10 +2,7 @@ package br.com.project.backend.controller;
 
 import br.com.project.backend.DTO.entities.WorkoutDTO;
 import br.com.project.backend.model.Workout;
-import br.com.project.backend.model.WorkoutExercise;
-import br.com.project.backend.service.WorkoutExerciseService;
 import br.com.project.backend.service.WorkoutService;
-import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

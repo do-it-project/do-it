@@ -4,15 +4,12 @@ import br.com.project.backend.DTO.entities.WorkoutDTO;
 import br.com.project.backend.exception.WorkoutAlreadyExistsException;
 import br.com.project.backend.mapper.WorkoutMapper;
 import br.com.project.backend.model.Workout;
-import br.com.project.backend.model.WorkoutExercise;
 import br.com.project.backend.repository.IWorkout;
-import br.com.project.backend.repository.IWorkoutExercise;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
+import java.util.Optional;;
 
 @Service
 public class WorkoutService {

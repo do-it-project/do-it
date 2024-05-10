@@ -1,6 +1,5 @@
 package br.com.project.backend.service;
 
-import br.com.project.backend.DTO.entities.StudentDTO;
 import br.com.project.backend.DTO.entities.UserDTO;
 import br.com.project.backend.DTO.response.LoginPersonalResponseDTO;
 import br.com.project.backend.DTO.response.LoginStudentResponseDTO;
@@ -18,7 +17,6 @@ import br.com.project.backend.utils.DTOUtils;
 import br.com.project.backend.utils.HashUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
