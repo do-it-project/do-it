@@ -1,14 +1,10 @@
     package br.com.project.backend.model;
 
-    import com.fasterxml.jackson.annotation.JsonIgnore;
-    import com.fasterxml.jackson.databind.annotation.EnumNaming;
-    import com.fasterxml.jackson.databind.deser.std.EnumDeserializer;
     import jakarta.persistence.*;
     import jakarta.validation.constraints.*;
     import lombok.AllArgsConstructor;
     import lombok.Data;
     import lombok.NoArgsConstructor;
-    import org.mapstruct.EnumMapping;
 
     @Data
     @AllArgsConstructor
