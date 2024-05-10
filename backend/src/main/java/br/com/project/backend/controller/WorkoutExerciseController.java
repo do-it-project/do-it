@@ -1,5 +1,6 @@
 package br.com.project.backend.controller;
 
+import br.com.project.backend.DTO.request.CreateWorkoutExerciseRequestDTO;
 import br.com.project.backend.model.WorkoutExercise;
 import br.com.project.backend.service.WorkoutExerciseService;
 import jakarta.validation.Valid;
@@ -20,7 +21,7 @@ public class WorkoutExerciseController {
     private WorkoutExerciseService workoutExerciseService;
 
     @PostMapping
-    public ResponseEntity<?> createWorkoutExercises(@Valid @RequestBody List<WorkoutExercise> weList) {
+    public ResponseEntity<?> createWorkoutExercises(@Valid @RequestBody List<CreateWorkoutExerciseRequestDTO> weList) {
         this.workoutExerciseService.createWorkoutExercises(weList);
 
         return ResponseEntity.ok("Exercises created for workout successfully");

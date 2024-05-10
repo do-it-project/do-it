@@ -4,14 +4,7 @@ import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 
 @Data
 @NoArgsConstructor
