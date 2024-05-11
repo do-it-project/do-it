@@ -1,7 +1,10 @@
 package br.com.project.backend.controller;
 
+import br.com.project.backend.DTO.entities.PersonalDTO;
+import br.com.project.backend.DTO.entities.StudentDTO;
 import br.com.project.backend.DTO.entities.UserDTO;
 import br.com.project.backend.DTO.request.ConfirmResetPasswordRequestDTO;
+import br.com.project.backend.DTO.request.EditUserRequestDTO;
 import br.com.project.backend.DTO.request.LoginRequestDTO;
 import br.com.project.backend.DTO.request.ResetPasswordRequestDTO;
 import br.com.project.backend.DTO.response.LoginPersonalResponseDTO;
@@ -47,6 +50,16 @@ public class UserController {
         return ResponseEntity.status(200).body(userService.usersList());
     }
 
+    @GetMapping("/students")
+    public ResponseEntity<List<StudentDTO>> getStudents(){
+        return ResponseEntity.status(200).body(userService.studentsList());
+    }
+
+    @GetMapping("/personals")
+    public ResponseEntity<List<PersonalDTO>> getPersonals(){
+        return ResponseEntity.status(200).body(userService.personalsList());
+    }
+
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody User user){
         UserDTO createdUser = userService.createUser(user);
@@ -55,12 +68,12 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserDTO> editUser(@Valid @RequestBody User user) {
+    public ResponseEntity<UserDTO> editUser(@Valid @RequestBody EditUserRequestDTO user) {
 
         Optional<User> tempUser = userService.findUserById(user.getId());
 
         if (tempUser.isPresent()) {
-            UserDTO updatedUser = userService.editUser(user.getPassword(), tempUser.get());
+            UserDTO updatedUser = userService.editUser(user, tempUser.get());
 
             return ResponseEntity.status(200).body(updatedUser);
         } else {

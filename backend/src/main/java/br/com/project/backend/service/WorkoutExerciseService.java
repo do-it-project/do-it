@@ -1,7 +1,10 @@
 package br.com.project.backend.service;
 
 import br.com.project.backend.DTO.request.CreateWorkoutExerciseRequestDTO;
+import br.com.project.backend.exception.ExerciseNotExistsException;
 import br.com.project.backend.exception.WorkoutExerciseAlreadyExistsException;
+import br.com.project.backend.exception.WorkoutExercisesListEmptyException;
+import br.com.project.backend.exception.WorkoutNotExistsException;
 import br.com.project.backend.model.Exercise;
 import br.com.project.backend.model.Workout;
 import br.com.project.backend.model.WorkoutExercise;
@@ -33,6 +36,10 @@ public class WorkoutExerciseService {
     @Transactional
     public void createWorkoutExercises(List<CreateWorkoutExerciseRequestDTO> weList){
 
+        if(weList.isEmpty()){
+            throw new WorkoutExercisesListEmptyException();
+        }
+
         List<WorkoutExercise> workoutExercises = new ArrayList<>();
 
         for(int i=0 ; i<weList.size() ; i++){
@@ -47,13 +54,13 @@ public class WorkoutExerciseService {
             Optional<Workout> tempWorkout = this.repositoryWorkout.findById(dto.getId_workout());
 
             if(tempWorkout.isEmpty()){
-                throw new RuntimeException("Workout don't exists");
+                throw new WorkoutNotExistsException("Workout with id " + dto.getId_workout() + " not exists");
             }
 
             Optional<Exercise> tempExercise = this.repositoryExercise.findById(dto.getId_exercise());
 
             if(tempExercise.isEmpty()){
-                throw new RuntimeException("Exercise don't exists");
+                throw new ExerciseNotExistsException("Exercise with id " + dto.getId_exercise() + " not exists");
             }
 
             workoutExercises.add(new WorkoutExercise(

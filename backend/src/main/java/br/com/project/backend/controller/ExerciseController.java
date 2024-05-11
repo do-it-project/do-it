@@ -1,5 +1,6 @@
 package br.com.project.backend.controller;
 
+import br.com.project.backend.DTO.request.CreateExerciseRequestDTO;
 import br.com.project.backend.model.Exercise;
 import br.com.project.backend.model.User;
 import br.com.project.backend.service.ExerciseService;
@@ -23,13 +24,11 @@ public class ExerciseController {
 
     @GetMapping
     public ResponseEntity<List<Exercise>> getExercises(){
-
-
         return ResponseEntity.ok(this.exerciseService.exerciseList());
     }
 
     @PostMapping
-    public ResponseEntity<Exercise> createExercise(@Valid @RequestBody Exercise ex){
+    public ResponseEntity<Exercise> createExercise(@Valid @RequestBody CreateExerciseRequestDTO ex){
         return ResponseEntity.status(HttpStatus.CREATED).body(this.exerciseService.createExercise(ex));
     }
 

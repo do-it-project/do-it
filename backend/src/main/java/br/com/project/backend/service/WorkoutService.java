@@ -1,9 +1,16 @@
 package br.com.project.backend.service;
 
 import br.com.project.backend.DTO.entities.WorkoutDTO;
+import br.com.project.backend.DTO.request.CreateWorkoutRequestDTO;
+import br.com.project.backend.DTO.request.EditWorkoutRequestDTO;
+import br.com.project.backend.exception.StudentNotFoundException;
 import br.com.project.backend.exception.WorkoutAlreadyExistsException;
+import br.com.project.backend.exception.WorkoutNotExistsException;
+import br.com.project.backend.mapper.UserMapper;
 import br.com.project.backend.mapper.WorkoutMapper;
+import br.com.project.backend.model.Student;
 import br.com.project.backend.model.Workout;
+import br.com.project.backend.repository.IUser;
 import br.com.project.backend.repository.IWorkout;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,27 +27,58 @@ public class WorkoutService {
     @Autowired
     private WorkoutMapper workoutMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private IUser userRepository;
+
+//    @Transactional
+//    public List<WorkoutDTO> workoutsList(){
+//        List<Workout> tempWorkouts = this.repository.findAll();
+//
+//        return workoutMapper.toDTOList(tempWorkouts);
+//    }
+
     @Transactional
-    public List<WorkoutDTO> workoutsList(){
+    public List<Workout> workoutsList(){
         List<Workout> tempWorkouts = this.repository.findAll();
 
-        return workoutMapper.toDTOList(tempWorkouts);
+        return tempWorkouts;
     }
 
     @Transactional
-    public WorkoutDTO createWorkout(Workout workout){
+    public WorkoutDTO createWorkout(CreateWorkoutRequestDTO workout){
         Optional<Workout> tempWorkout = this.findWorkoutByName(workout.getName());
 
         if(tempWorkout.isPresent()){
             throw new WorkoutAlreadyExistsException();
         }
 
-        return workoutMapper.toDTO(this.repository.save(workout));
+        Student tempStudent = this.userRepository.findStudentById(workout.getId_student());
+
+        if(tempStudent == null){
+            throw new StudentNotFoundException("Student not found");
+        }
+
+        Workout newWorkout = new Workout(workout.getName(), workout.getComments(), tempStudent);
+
+        return workoutMapper.toDTO(this.repository.save(newWorkout));
     }
 
     @Transactional
-    public WorkoutDTO editWorkout(Workout workout){
-        return workoutMapper.toDTO(this.repository.save(workout));
+    public WorkoutDTO editWorkout(EditWorkoutRequestDTO workout){
+
+        Optional<Workout> tempWorkout = this.repository.findById(workout.getId());
+
+        if(tempWorkout.isEmpty()){
+            throw new WorkoutNotExistsException();
+        }
+
+        tempWorkout.get().setComments(workout.getComments());
+        tempWorkout.get().setName(workout.getName());
+
+        return workoutMapper.toDTO(this.repository.save(tempWorkout.get()));
     }
 
     @Transactional

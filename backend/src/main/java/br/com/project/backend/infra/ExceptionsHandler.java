@@ -22,8 +22,8 @@ public class ExceptionsHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
-    @ExceptionHandler(PyshicalAssessmentAlreadyExistsException.class)
-    public ResponseEntity<String> handlePhysicalAssessmentAlreadyExists(PyshicalAssessmentAlreadyExistsException e) {
+    @ExceptionHandler(PhysicalAssessmentAlreadyExistsException.class)
+    public ResponseEntity<String> handlePhysicalAssessmentAlreadyExists(PhysicalAssessmentAlreadyExistsException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
@@ -52,12 +52,25 @@ public class ExceptionsHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
     }
 
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Map<String, String>> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        Map<String, String> errors = new HashMap<>();
-        errors.put("error", "Invalid format JSON");
+    @ExceptionHandler(WorkoutExercisesListEmptyException.class)
+    public ResponseEntity<String> handleWorkoutExercisesListEmptyException(WorkoutExercisesListEmptyException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+
+    @ExceptionHandler(StudentNotFoundException.class)
+    public ResponseEntity<String> handleStudentNotFoundException(StudentNotFoundException e){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+
+    @ExceptionHandler(WorkoutNotExistsException.class)
+    public ResponseEntity<String> handleWorkoutNotExistsException(WorkoutNotExistsException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(ExerciseNotExistsException.class)
+    public ResponseEntity<String> handleExerciseNotExistsException(ExerciseNotExistsException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
@@ -73,6 +86,14 @@ public class ExceptionsHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<String> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e){
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(e.getMessage());
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, String>> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("error", "Invalid format JSON");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

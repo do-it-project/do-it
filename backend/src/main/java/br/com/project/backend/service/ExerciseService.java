@@ -1,5 +1,6 @@
 package br.com.project.backend.service;
 
+import br.com.project.backend.DTO.request.CreateExerciseRequestDTO;
 import br.com.project.backend.exception.ExerciseAlreadyExistsException;
 import br.com.project.backend.model.Exercise;
 import br.com.project.backend.repository.IExercise;
@@ -22,14 +23,16 @@ public class ExerciseService {
     }
 
     @Transactional
-    public Exercise createExercise(Exercise ex){
+    public Exercise createExercise(CreateExerciseRequestDTO ex){
         Optional<Exercise> tempEx = this.repository.findByName(ex.getName());
 
         if(tempEx.isPresent()){
             throw new ExerciseAlreadyExistsException();
         }
 
-        return this.repository.save(ex);
+        Exercise exercise = new Exercise(ex.getName(), ex.getDescription(), ex.getLink_tutorial());
+
+        return this.repository.save(exercise);
     }
 
     @Transactional

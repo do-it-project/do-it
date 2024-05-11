@@ -1,13 +1,17 @@
 package br.com.project.backend.service;
 
 import br.com.project.backend.DTO.entities.PhysicalAssessmentDTO;
-import br.com.project.backend.exception.PyshicalAssessmentAlreadyExistsException;
+import br.com.project.backend.DTO.request.CreatePhysicalAssessmentRequestDTO;
+import br.com.project.backend.exception.PhysicalAssessmentAlreadyExistsException;
 import br.com.project.backend.mapper.PhysicalAssessmentMapper;
 import br.com.project.backend.model.PhysicalAssessment;
 import br.com.project.backend.repository.IPhysicalAssessment;
+import br.com.project.backend.utils.DateUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,14 +31,16 @@ public class PhysicalAssessmentService {
     }
 
     @Transactional
-    public PhysicalAssessmentDTO createPhysicalAssessment(PhysicalAssessment pa){
+    public PhysicalAssessment createPhysicalAssessment(CreatePhysicalAssessmentRequestDTO pa){
         Optional<PhysicalAssessment> tempPA = this.findPhysicalAssessmentByName(pa.getName());
 
         if(tempPA.isPresent()){
-            throw new PyshicalAssessmentAlreadyExistsException();
+            throw new PhysicalAssessmentAlreadyExistsException();
         }
+        pa.setCreationDate(new DateUtils().formatDate(LocalDateTime.now()));
+        pa.setImc(pa.calc_imc());
 
-        return paMapper.toDTO(this.repository.save(pa));
+        return this.repository.save(paMapper.toPhysicalAssessment(pa));
     }
 
     @Transactional

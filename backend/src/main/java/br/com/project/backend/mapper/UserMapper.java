@@ -26,4 +26,9 @@ public interface UserMapper {
     PersonalDTO PersonalToPersonalDTO(Personal personal);
 
     List<UserDTO> toDTOList(List<User> userList);
+
+    List<StudentDTO> toDTOStudentList(List<Student> studentsList);
+
+    List<PersonalDTO> toDTOPersonalList(List<Personal> personalList);
+
 }

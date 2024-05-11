@@ -1,6 +1,9 @@
 package br.com.project.backend.service;
 
+import br.com.project.backend.DTO.entities.PersonalDTO;
+import br.com.project.backend.DTO.entities.StudentDTO;
 import br.com.project.backend.DTO.entities.UserDTO;
+import br.com.project.backend.DTO.request.EditUserRequestDTO;
 import br.com.project.backend.DTO.response.LoginPersonalResponseDTO;
 import br.com.project.backend.DTO.response.LoginStudentResponseDTO;
 import br.com.project.backend.exception.UserAlreadyExistsException;
@@ -42,6 +45,20 @@ public class UserService{
     }
 
     @Transactional
+    public List<StudentDTO> studentsList(){
+        List<Student> students = this.repository.findStudentsByType("S");
+
+        return userMapper.toDTOStudentList(students);
+    }
+
+    @Transactional
+    public List<PersonalDTO> personalsList(){
+        List<Personal> personals = this.repository.findPersonalsByType("P");
+
+        return userMapper.toDTOPersonalList(personals);
+    }
+
+    @Transactional
     public UserDTO createUser(User user){
 
         Optional<User> tempUser = this.findUserByEmail(user.getEmail());
@@ -67,18 +84,22 @@ public class UserService{
     }
 
     @Transactional
-    public UserDTO editUser(String passwordText, User user) {
+    public UserDTO editUser(EditUserRequestDTO userEdit, User userDatabase) {
 
-        if (!passwordText.isEmpty()) {
-            if(passwordText.length() >= 5){
-                String encodePassword = hashUtils.hashString(passwordText);
-                user.setPassword(encodePassword);
+        if (!userEdit.getPassword().isEmpty()) {
+            if(userEdit.getPassword().length() >= 5){
+                String encodePassword = hashUtils.hashString(userEdit.getPassword());
+                userDatabase.setPassword(encodePassword);
             } else {
                 throw new UserPasswordNotValidException();
             }
         }
 
-        return userMapper.UserToUserDTO(this.repository.save(user));
+        userDatabase.setName(userEdit.getName());
+        userDatabase.setPhone(userEdit.getPhone());
+        userDatabase.setUrl_photo(userEdit.getUrl_photo());
+
+        return userMapper.UserToUserDTO(this.repository.save(userDatabase));
     }
 
     @Transactional

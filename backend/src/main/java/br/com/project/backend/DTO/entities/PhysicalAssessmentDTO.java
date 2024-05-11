@@ -1,9 +1,13 @@
 package br.com.project.backend.DTO.entities;
 
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -12,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class PhysicalAssessmentDTO {
     private int id;
     private String name;
+    private LocalDateTime creationDate;
     private String comments;
     private Double height;
     private Double weight;
@@ -27,5 +32,6 @@ public class PhysicalAssessmentDTO {
     private Double left_calf_measurement;
     private Double chest_measurement;
     private Double abdominal_measurement;
-    private UserDTO user;
+    private String student_name;
+    private String student_email;
 }
