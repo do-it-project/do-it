@@ -15,7 +15,7 @@ function AnimationWrapper({
         animate={animate}
         transition={transition}
         key={keyValue}
-        className={className}
+        className={`${className} m-0 p-0`}
       >
         {children}
       </motion.div>

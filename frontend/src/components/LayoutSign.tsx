@@ -6,7 +6,7 @@ type PropsType = {
 
 const LayoutSign = ({ children }: PropsType) => {
   return (
-    <div className="bg-black-1 flex justify-center items-center w-full h-screen overflow-hidden">
+    <div className="bg-black-1 flex justify-center items-center w-full h-screen overflow-hidden md:p-10">
       <AnimationWrapper>{children}</AnimationWrapper>
     </div>
   );

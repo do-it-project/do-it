@@ -52,8 +52,8 @@ const Register = () => {
 
   return (
     <LayoutSign>
-      <div className="flex rounded-lg overflow-hidden m-6 transition-all duration-1000">
-        <div className="flex flex-col items-center w-[450px] p-7 bg-black-2">
+      <div className="flex rounded-lg overflow-hidden transition-all duration-1000">
+        <div className="flex flex-col items-center max-w-[420px] md:w-svw p-7 bg-black-2">
           <img className="w-[128px] h-[128px]" src={Logo} alt="logo image" />
 
           <h1 className="text-gray-1 text-[24px] font-semibold pt-4 pb-6 text-xl">
@@ -129,7 +129,7 @@ const Register = () => {
         </div>
 
         <img
-          className="max-w-[676px] hidden lg:block"
+          className="max-w-[590px] hidden lg:block"
           src={NoPainNoGain}
           alt="no pain no gain image"
         />
