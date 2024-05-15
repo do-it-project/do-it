@@ -5,7 +5,7 @@ interface PropsType {
 
 const SpanError = ({ message, className }: PropsType) => {
   return (
-    <span className={`text-error text-sm font-normal ${className}`}>
+    <span className={`text-error text-xs font-normal ${className}`}>
       {message}
     </span>
   );

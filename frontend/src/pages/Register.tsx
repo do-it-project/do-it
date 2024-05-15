@@ -1,6 +1,6 @@
 import { fetchCreateUserRequest } from "@/api/fetchCreateUserRequest";
 import Logo from "@/assets/logo.png";
-import NoPainNoGain from "@/assets/no-pain-no-gain.png";
+import WorkHarder from "@/assets/cardio.webp";
 import Input from "@/components/Input";
 import LayoutSign from "@/components/LayoutSign";
 import SpanError from "@/components/SpanError";
@@ -14,6 +14,18 @@ import { FaLock, FaUser } from "react-icons/fa";
 import { ImProfile } from "react-icons/im";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useRef } from "react";
 
 const schema = yup.object().shape({
   email: yup.string().required("O email é obrigatório").email("Email inválido"),
@@ -38,6 +50,8 @@ const Register = () => {
     resolver: yupResolver(schema),
   });
 
+  const formRef = useRef<HTMLFormElement>(null);
+
   async function submitForm(data: CreateUserRequest) {
     data.type = "S";
     data.url_photo = "";
@@ -54,13 +68,18 @@ const Register = () => {
     <LayoutSign>
       <div className="flex rounded-lg overflow-hidden transition-all duration-1000">
         <div className="flex flex-col items-center max-w-[420px] md:w-svw p-7 bg-black-2">
-          <img className="w-[128px] h-[128px]" src={Logo} alt="logo image" />
+          <img
+            className="w-[100px] h-[100px] md:w-[128px] md:h-[128px]"
+            src={Logo}
+            alt="logo image"
+          />
 
           <h1 className="text-gray-1 text-[24px] font-semibold pt-4 pb-6 text-xl">
             Se tornar um parceiro <span className="text-blue-1">DO IT</span>
           </h1>
 
           <form
+            ref={formRef}
             className="flex flex-col w-full"
             onSubmit={handleSubmit(submitForm)}
           >
@@ -107,15 +126,36 @@ const Register = () => {
               <SpanError message={errors.password?.message} />
             )}
 
-            <Button
-              className="rounded-lg p-6 my-4 text-gray-1 font-semibold text-base "
-              type="submit"
-            >
-              Registrar
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button className="rounded-lg p-6 my-4 text-gray-1 font-semibold text-base">
+                  Registrar
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Tem certeza que deseja enviar os dados?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Essa ação não pode ser desfeita. Seu registro será
+                    solicitado com os dados fornecidos, o e-mail não poderá ser
+                    modificado posteriormente.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => formRef.current?.requestSubmit()}
+                  >
+                    Continuar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </form>
 
-          <div className="w-full flex items-center gap-2 text-gray-1 mt-10">
+          <div className="w-full flex items-center gap-2 text-gray-1 md:mt-10">
             <hr className="w-full text-blue-1" />
             ou
             <hr className="w-full text-blue-1" />
@@ -130,7 +170,7 @@ const Register = () => {
 
         <img
           className="max-w-[590px] hidden lg:block"
-          src={NoPainNoGain}
+          src={WorkHarder}
           alt="no pain no gain image"
         />
       </div>

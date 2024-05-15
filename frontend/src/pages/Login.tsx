@@ -1,6 +1,6 @@
 import { fetchLoginRequest } from "@/api/fetchLoginRequest";
 import Logo from "@/assets/logo.png";
-import WorkHarder from "@/assets/work-harder.png";
+import NoPainNoGain from "@/assets/no-pain-no-gain.png";
 import Input from "@/components/Input";
 import LayoutSign from "@/components/LayoutSign";
 import SpanError from "@/components/SpanError";
@@ -25,7 +25,6 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -41,12 +40,16 @@ const Login = () => {
       <div className="flex rounded-lg overflow-hidden">
         <img
           className="max-w-[590px] hidden lg:block"
-          src={WorkHarder}
+          src={NoPainNoGain}
           alt="work harder image"
         />
 
         <div className="flex flex-col items-center max-w-[420px] md:w-svw p-7  bg-black-2">
-          <img className="w-[128px] h-[128px]" src={Logo} alt="logo image" />
+          <img
+            className="w-[100px] h-[100px] md:w-[128px] md:h-[128px]"
+            src={Logo}
+            alt="logo image"
+          />
 
           <h1 className="text-gray-1 text-[24px] font-semibold pt-4 pb-6 text-xl">
             Entre com seus dados
