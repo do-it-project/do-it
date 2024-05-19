@@ -7,6 +7,7 @@ type InputProps = {
   IconLeft: React.ElementType;
   className?: string;
   register?: any;
+  disabled?: boolean;
 };
 
 const Input = ({
@@ -15,6 +16,7 @@ const Input = ({
   IconLeft,
   className,
   register,
+  disabled = false,
 }: InputProps) => {
   const [iconPassword, setIconPassword] = useState(false);
   const [inputType, setInputType] = useState(type);
@@ -30,11 +32,15 @@ const Input = ({
         className="absolute bottom-[15px] left-3 h-5 w-5"
         color="#858585"
       />
+
       <input
         type={inputType}
         placeholder={placeholder}
-        className="w-full rounded-lg p-3 pl-11 text-base flex items-center bg-gray-1 placeholder-gray-500 outline-none"
+        className={`w-full rounded-lg p-3 pl-11 text-base flex items-center bg-gray-1 placeholder-gray-500 outline-none ${
+          disabled && "bg-gray-3"
+        }`}
         {...register}
+        disabled={disabled}
       />
 
       {type === "password" &&

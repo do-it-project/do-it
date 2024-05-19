@@ -10,7 +10,7 @@ const Navbar = ({ toggleMenu }: any) => {
 
   return (
     <nav
-      className={`bg-black-2 fixed left-0 max-w-[300px] h-full w-full px-3 p-10 overflow-hidden transition duration-300
+      className={`bg-black-2 fixed left-0 max-w-[300px] h-full w-full px-3 p-10 overflow-hidden transition duration-300 z-20
       ${toggleMenu ? "translate-x-0" : "-translate-x-[150%] md:translate-x-0"}
     `}
     >
@@ -20,14 +20,14 @@ const Navbar = ({ toggleMenu }: any) => {
         YOU CAN <span className="text-blue-1">DO IT</span>
       </h1>
 
-      <div className="h-full w-full flex flex-col mt-36">
+      <div className="h-full w-full flex flex-col mt-36 ">
         <NavItem
           Icon={FaHome}
           text="Início"
           isActive={activeItem === "Início"}
           onClick={() => {
             setActiveItem("Início");
-            navigate("/dash/inicio");
+            navigate("/aluno/inicio");
           }}
         />
         <NavItem
@@ -36,7 +36,7 @@ const Navbar = ({ toggleMenu }: any) => {
           isActive={activeItem === "Avaliações Físicas"}
           onClick={() => {
             setActiveItem("Avaliações Físicas");
-            navigate("/dash/physicalAssessments");
+            navigate("/aluno/avaliacoes-fisicas");
           }}
         />
         <NavItem
@@ -45,7 +45,7 @@ const Navbar = ({ toggleMenu }: any) => {
           isActive={activeItem === "Meus treinos"}
           onClick={() => {
             setActiveItem("Meus treinos");
-            navigate("/dash/workouts");
+            navigate("/aluno/treinos");
           }}
         />
       </div>

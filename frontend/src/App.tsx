@@ -11,11 +11,15 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/registrar" element={<Register />} />
-      <Route path="/dash" element={<Layout />}>
-        <Route path="inicio" element={<Home />} />
-        <Route path="physicalAssessments" element={<PhysicalAssessments />} />
-        <Route path="workouts" element={<Workouts />} />
-      </Route>
+      <Route path="/aluno/inicio" element={<Layout children={<Home />} />} />
+      <Route
+        path="/aluno/avaliacoes-fisicas"
+        element={<Layout children={<PhysicalAssessments />} />}
+      />
+      <Route
+        path="aluno/treinos"
+        element={<Layout children={<Workouts />} />}
+      />
     </Routes>
   );
 }

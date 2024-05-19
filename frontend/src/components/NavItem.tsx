@@ -11,7 +11,7 @@ const NavItem = ({ text, Icon, isActive, onClick }: NavItemsProps) => {
   return (
     <div
       onClick={onClick}
-      className={`flex items-center w-full my-1 p-2 rounded-lg cursor-pointer transition-colors hover:bg-black-1/90 text-gray-1 ${
+      className={`flex items-center w-full my-1 p-2 rounded-lg cursor-pointer transition-colors duration-300 hover:bg-black-1/90 text-gray-1 ${
         isActive ? "bg-black-1/90 border-l-blue-1 border-l-2" : ""
       }`}
     >
