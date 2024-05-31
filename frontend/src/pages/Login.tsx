@@ -1,15 +1,19 @@
 import { fetchLoginRequest } from "@/api/fetchLoginRequest";
 import Logo from "@/assets/logo.png";
 import NoPainNoGain from "@/assets/no-pain-no-gain.png";
+import { storeInSession } from "@/common/session";
 import Input from "@/components/Input";
 import LayoutSign from "@/components/LayoutSign";
 import SpanError from "@/components/SpanError";
 import { Button } from "@/components/ui/button";
-import { LoginRequest } from "@/types";
+import { AppDispatch } from "@/store/store";
+import { setUserLogged } from "@/store/userLogged/userLoggedSlice";
+import { LoginRequest, UserLogged } from "@/types";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { FaLock, FaUser } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
@@ -29,10 +33,22 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
+  const navigate = useNavigate();
+
+  const dispatch: AppDispatch = useDispatch();
+
   async function submitForm(data: LoginRequest) {
-    await fetchLoginRequest(data)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    try {
+      const res: UserLogged = await fetchLoginRequest(data);
+
+      storeInSession("user", JSON.stringify(res));
+      dispatch(setUserLogged(res));
+      console.log(res);
+
+      navigate("/aluno/inicio");
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (

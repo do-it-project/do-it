@@ -1,14 +1,8 @@
+import { UserLogged } from "@/types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-export type User = {
-  name: string;
-  age: number;
-  email: string;
-  password: string;
-};
-
 type UserLoggedState = {
-  userLogged: User | null;
+  userLogged: UserLogged | null;
   isUserLogged: boolean;
 };
 
@@ -25,8 +19,9 @@ export const userLoggedSlice = createSlice({
       state.isUserLogged = !state.isUserLogged;
     },
 
-    setUserLogged: (state, action: PayloadAction<User>) => {
+    setUserLogged: (state, action: PayloadAction<UserLogged>) => {
       state.userLogged = action.payload;
+      state.isUserLogged = true;
     },
 
     resetUserLogged: (state) => {
