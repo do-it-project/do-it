@@ -1,10 +1,13 @@
 export interface User {
   id: number;
+  name: string;
   email: string;
-  password: string;
+  password?: string;
   phone: string;
-  url_photo: string;
+  url_photo?: string;
   type: string;
+  physicalAssessments?: PhysicalAssessment[];
+  workouts?: Workout[];
 }
 
 export interface Token {
@@ -29,7 +32,7 @@ export interface Workout {
   id: number;
   name: string;
   comments: string;
-  workout_exercises: WorkoutExercise[];
+  workout_exercises?: WorkoutExercise[];
 }
 
 export interface PhysicalAssessment {
