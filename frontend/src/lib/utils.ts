@@ -6,11 +6,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const toastSuccessEditUser = () =>
-  toast("Perfil atualizado com sucesso!", {
-    description: Date.now().toLocaleString().toString(),
+export const toastSuccessEditUser = (
+  message: string,
+  description?: string,
+  label?: string
+) =>
+  toast.success(message, {
+    description: description ?? new Date().toLocaleString(),
     action: {
-      label: "Fechar",
+      label: label ?? "Fechar",
       onClick: () => {},
     },
   });

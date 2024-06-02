@@ -33,6 +33,7 @@ export interface Workout {
   name: string;
   comments: string;
   workout_exercises?: WorkoutExercise[];
+  creationDate: string;
 }
 
 export interface PhysicalAssessment {

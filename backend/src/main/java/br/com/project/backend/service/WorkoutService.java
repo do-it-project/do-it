@@ -12,9 +12,12 @@ import br.com.project.backend.model.Student;
 import br.com.project.backend.model.Workout;
 import br.com.project.backend.repository.IUser;
 import br.com.project.backend.repository.IWorkout;
+import br.com.project.backend.utils.DateUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;;
 
@@ -61,7 +64,11 @@ public class WorkoutService {
             throw new StudentNotFoundException("Student not found");
         }
 
-        Workout newWorkout = new Workout(workout.getName(), workout.getComments(), tempStudent);
+        LocalDateTime creationDate = LocalDateTime.now();
+
+        Workout newWorkout = new Workout(
+                workout.getName(), workout.getComments(), tempStudent , new DateUtils().formatDate(creationDate)
+        );
 
         return workoutMapper.toDTO(this.repository.save(newWorkout));
     }
