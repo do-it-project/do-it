@@ -26,7 +26,7 @@ const Navbar = ({ toggleMenu }: any) => {
         YOU CAN <span className="text-blue-1">DO IT</span>
       </h1>
 
-      <div className="md:max-h-[80%] md:h-full w-full flex flex-col justify-between mt-10 gap-36 md:gap-0">
+      <div className="md:h-full max-h-[80%] w-full flex flex-col justify-between mt-10 md:gap-0 ">
         <div>
           <NavItem
             Icon={FaHome}
@@ -58,7 +58,7 @@ const Navbar = ({ toggleMenu }: any) => {
         </div>
 
         <NavItem
-          className="lg:mb-10"
+          className="mb-10"
           Icon={IoMdLogOut}
           text="Sair"
           onClick={() => {

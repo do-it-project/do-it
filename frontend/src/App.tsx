@@ -21,15 +21,15 @@ function App() {
 
   useEffect(() => {
     const userInSession = getInSession("user");
-
+    console.log("entrei");
     if (userInSession && JSON.parse(userInSession).user.type === "S") {
       navigate("/aluno/inicio");
       dispatch(setUserLogged(JSON.parse(userInSession)));
     } else if (userInSession && JSON.parse(userInSession).user.type === "P") {
       navigate("/personal/inicio");
     } else {
-      dispatch(resetUserLogged());
       navigate("/");
+      dispatch(resetUserLogged());
     }
   }, []);
 

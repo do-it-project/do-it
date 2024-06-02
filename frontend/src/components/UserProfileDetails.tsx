@@ -23,15 +23,14 @@ import SpanError from "./SpanError";
 import { fetchEditUserRequest } from "@/api/fetchEditUserRequest";
 import { AxiosError } from "axios";
 import { EditUserRequest, UserLogged } from "@/types";
-import { toast } from "sonner";
 import { toastSuccessEditUser } from "@/lib/utils";
 import { Token, User } from "@/types/models";
-import { getInSession, storeInSession } from "@/common/session";
+import { storeInSession } from "@/common/session";
 import { setUserLogged } from "@/store/userLogged/userLoggedSlice";
 
 const schema = yup.object().shape({
   name: yup.string().min(4, "O nome deve conter no mínimo 4 caracteres"),
-  phone: yup.string().min(15, "Telefone inválido"),
+  phone: yup.string().min(10, "Telefone inválido"),
   password: yup.string().test({
     test: function (value) {
       if (!value || value.trim() === "") {
@@ -87,7 +86,7 @@ const UserProfileDetails = () => {
         dispatch(setUserLogged(UserLoggedUpdated));
         storeInSession("user", JSON.stringify(UserLoggedUpdated));
 
-        toastSuccessEditUser();
+        toastSuccessEditUser("Perfil alterado com sucesso!");
         reset();
       })
       .catch((err: AxiosError) => console.log(err.response?.data));

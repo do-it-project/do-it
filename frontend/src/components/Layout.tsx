@@ -2,7 +2,6 @@ import { useState } from "react";
 import Navbar from "./Navbar";
 import { Switch } from "./ui/switch";
 import UserProfileDetails from "./UserProfileDetails";
-import AnimationWrapper from "./AnimationWrapper";
 
 type PropsType = {
   children: React.ReactNode;
@@ -11,7 +10,7 @@ type PropsType = {
 const Layout = ({ children }: PropsType) => {
   const [toggleMenu, setToggleMenu] = useState(false);
   return (
-    <div className="w-full bg-black-1 h-screen">
+    <div className="w-full bg-black-1 pb-20 min-h-screen">
       <Navbar toggleMenu={toggleMenu} />
 
       <UserProfileDetails />
