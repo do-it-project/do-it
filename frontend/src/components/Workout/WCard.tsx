@@ -21,16 +21,14 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { DialogTrigger } from "@radix-ui/react-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { WorkoutExercise } from "@/types/models";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 const workouts_images = [
   <FaDumbbell />,
@@ -51,9 +49,15 @@ interface WCardProps {
 }
 
 const WCard = (props: WCardProps) => {
+  function convertToEmbedUrl(url: string) {
+    const videoId = url.split("youtu.be/")[1].split("?")[0];
+    const params = url.split("?")[1];
+    return `https://youtube.com/embed/${videoId}?${params}`;
+  }
+
   return (
     <Card
-      className={`${props.classname} w-[300px] border-none drop-shadow-xl   shadow-lg shadow-black-4`}
+      className={`${props.classname} w-[350px] border-none drop-shadow-xl   shadow-lg shadow-black-4`}
     >
       <CardHeader>
         <CardTitle className="text-lg text-blue-1 font-bold flex justify-between mb-2 whitespace-break-spaces ">
@@ -67,7 +71,7 @@ const WCard = (props: WCardProps) => {
                     <LuEye className="text-blue-1 cursor-pointer transition-colors hover:text-blue-2 duration-400 hover:scale-[1.1] active:scale-[1.0] h-15 w-15 mt-1 text-xl" />
                   </DialogTrigger>
 
-                  <DialogContent className="max-w-[400px] max-h-[400px] lg:max-h-full sm:max-w-[450px] overflow-scroll md:overflow-auto">
+                  <DialogContent className="max-w-[400px] max-h-[400px] lg:max-h-[600px] sm:max-w-[600px] overflow-scroll md:overflow-auto custom-scrollbar">
                     <DialogHeader>
                       <DialogTitle className="text-blue-1">
                         {props.name}
@@ -76,15 +80,44 @@ const WCard = (props: WCardProps) => {
 
                     <div className="my-3 text-gray-1">
                       {props.workout_exercises?.map((we) => (
-                        <div className="flex justify-between items-center bg-black-4/70 p-3 rounded-md my-2">
-                          <h3 className="capitalize">{we.exercise.name}</h3>
-                          <div className="flex gap-3 items-center">
-                            <span>
-                              {we.sets}x{we.repetitions} - {we.rest_pause}
-                            </span>
-                            <LuEye className="text-blue-1 cursor-pointer transition-colors hover:text-blue-2 duration-400 hover:scale-[1.1] active:scale-[1.0] h-15 w-15 text-xl" />
-                          </div>
-                        </div>
+                        <Accordion type="single" collapsible>
+                          <AccordionItem value={we.id.toString()}>
+                            <div className="flex justify-between items-center bg-black-4/70 py-2 px-3 rounded-md my-2">
+                              <h1 className="capitalize">{we.exercise.name}</h1>
+                              <div className="flex gap-3 items-center">
+                                <span>
+                                  {we.sets}x{we.repetitions} - {we.rest_pause}s
+                                </span>
+
+                                <AccordionTrigger>
+                                  <LuEye className="text-blue-1 cursor-pointer transition-colors hover:text-blue-2 duration-400 hover:scale-[1.1] active:scale-[1.0] h-15 w-15 text-xl" />
+                                </AccordionTrigger>
+                              </div>
+                            </div>
+
+                            <AccordionContent>
+                              <div className="flex text-gray-1 flex-col gap-5  px-2 mt-2 mb-3">
+                                <p className="text-blue-2 font-semibold">
+                                  Descrição:{" "}
+                                  <span className="text-gray-3">
+                                    {we.exercise.description}{" "}
+                                  </span>
+                                </p>
+                                <iframe
+                                  className="sm:w-[515px] sm:h-[300px] w-full min-h-[300px]"
+                                  src={convertToEmbedUrl(
+                                    we.exercise.link_tutorial
+                                  )}
+                                  frameBorder={0}
+                                  title="YouTube Tutorial"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                  referrerPolicy="strict-origin-when-cross-origin"
+                                  allowFullScreen
+                                ></iframe>
+                              </div>
+                            </AccordionContent>
+                          </AccordionItem>
+                        </Accordion>
                       ))}
                     </div>
                   </DialogContent>

@@ -67,7 +67,8 @@ public class WorkoutService {
         LocalDateTime creationDate = LocalDateTime.now();
 
         Workout newWorkout = new Workout(
-                workout.getName(), workout.getComments(), tempStudent , new DateUtils().formatDate(creationDate)
+                workout.getName(), workout.getComments(), workout.getTag(), tempStudent ,
+                new DateUtils().formatDate(creationDate)
         );
 
         return workoutMapper.toDTO(this.repository.save(newWorkout));

@@ -19,6 +19,7 @@ public class WorkoutDTO {
     private Integer id;
     private String name;
     private String comments;
+    private String tag;
     private Integer id_student;
     private LocalDateTime creationDate;
 }

@@ -22,6 +22,7 @@ export interface Exercise {
 }
 
 export interface WorkoutExercise {
+  id: number;
   repetitions: number;
   rest_pause: number;
   sets: number;
@@ -32,6 +33,7 @@ export interface Workout {
   id: number;
   name: string;
   comments: string;
+  tag?: string;
   workout_exercises?: WorkoutExercise[];
   creationDate: string;
 }

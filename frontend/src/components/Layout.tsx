@@ -16,12 +16,12 @@ const Layout = ({ children }: PropsType) => {
       <UserProfileDetails />
 
       <div className="md:ml-[328px] ml-6 h-full pt-28 pr-6">
-        <hr className="text-gray-1 h-2 mb-4"></hr>
+        <hr className="text-gray-4 h-2 mb-4"></hr>
         {children}
       </div>
 
       <Switch
-        className={"absolute right-6 bottom-6 text-gray-1 md:hidden z-10"}
+        className={"fixed right-6 bottom-6 text-gray-1 md:hidden z-10"}
         onClick={() => setToggleMenu((prev) => !prev)}
       />
     </div>

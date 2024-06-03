@@ -27,6 +27,10 @@ public class Workout {
     @Column(name = "comments", columnDefinition = "TEXT", nullable = false)
     private String comments;
 
+    @NotBlank(message = "The tag field is required")
+    @Column(name = "tag", length = 40, nullable = false)
+    private String tag;
+
     @Column(name="creation_date", columnDefinition = "TIMESTAMP", nullable = false)
     private LocalDateTime creationDate;
 
@@ -39,9 +43,10 @@ public class Workout {
     @JsonManagedReference
     private List<WorkoutExercise> workout_exercises;
 
-    public Workout(String name, String comments, Student student, LocalDateTime creation_date) {
+    public Workout(String name, String comments, String tag, Student student, LocalDateTime creation_date) {
         this.name = name;
         this.comments = comments;
+        this.tag = tag;
         this.student = student;
         this.creationDate = creation_date;
     }

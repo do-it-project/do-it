@@ -20,6 +20,9 @@ public class CreateWorkoutRequestDTO {
     @NotBlank(message = "Comments cannot be blank")
     private String comments;
 
+    @NotBlank(message = "Tag cannot be blank")
+    private String tag;
+
     @NotNull(message = "id_student cannot be null")
     private Integer id_student;
 }
