@@ -19,19 +19,19 @@ function App() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const userInSession = getInSession("user");
-    console.log("entrei");
-    if (userInSession && JSON.parse(userInSession).user.type === "S") {
-      navigate("/aluno/inicio");
-      dispatch(setUserLogged(JSON.parse(userInSession)));
-    } else if (userInSession && JSON.parse(userInSession).user.type === "P") {
-      navigate("/personal/inicio");
-    } else {
-      navigate("/");
-      dispatch(resetUserLogged());
-    }
-  }, []);
+  // useEffect(() => {
+  //   const userInSession = getInSession("user");
+  //   console.log("entrei");
+  //   if (userInSession && JSON.parse(userInSession).user.type === "S") {
+  //     navigate("/aluno/inicio");
+  //     dispatch(setUserLogged(JSON.parse(userInSession)));
+  //   } else if (userInSession && JSON.parse(userInSession).user.type === "P") {
+  //     navigate("/personal/inicio");
+  //   } else {
+  //     navigate("/");
+  //     dispatch(resetUserLogged());
+  //   }
+  // }, []);
 
   return (
     <>

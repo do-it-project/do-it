@@ -95,7 +95,7 @@ const UserProfileDetails = () => {
   return (
     <Dialog onOpenChange={() => reset()}>
       <DialogTrigger asChild>
-        <div className="flex gap-4 absolute lg:right-8 md:right-6 right-2 top-6 items-center text-gray-1 py-3 px-3 rounded-lg cursor-pointer transition-colors duration-300 hover:bg-black-2/90">
+        <div className="flex items-center text-gray-1 p-2 rounded-full cursor-pointer transition-colors duration-300 hover:bg-black-2/90 w-fit ml-auto">
           <Avatar className="w-12 h-12">
             <AvatarImage src={Frabizzyz} />
             <AvatarFallback>CN</AvatarFallback>
@@ -130,10 +130,11 @@ const UserProfileDetails = () => {
 
           <Input
             IconLeft={FaUser}
-            placeholder={userLogged?.user?.email as string}
+            placeholder={"Seu e-mail"}
+            defaultValue={userLogged?.user?.email}
             type="text"
             disabled={true}
-            className="mt-2"
+            className="mt-2 text-gray-1"
           />
 
           <Input
@@ -150,7 +151,7 @@ const UserProfileDetails = () => {
 
           <Input
             IconLeft={FaLock}
-            placeholder="Sua senha secreta"
+            placeholder="Sua senha"
             type="password"
             className="mt-2"
             register={{ ...register("password") }}
@@ -161,7 +162,7 @@ const UserProfileDetails = () => {
 
           <Input
             IconLeft={FaLock}
-            placeholder="Confirma sua senha secreta"
+            placeholder="Confirma sua senha"
             type="password"
             className="mt-2"
             register={{ ...register("confirmPassword") }}
@@ -170,7 +171,7 @@ const UserProfileDetails = () => {
             <SpanError message={errors.confirmPassword.message} />
           )}
 
-          <DialogFooter className="mt-4">
+          <DialogFooter className="mt-6">
             <Button type="submit">Salvar</Button>
           </DialogFooter>
         </form>
